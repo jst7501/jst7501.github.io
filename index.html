@@ -1,96 +1,270 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>정해일 • Personal Page</title>
-<style>
-:root{
-  --font:'Noto Sans KR',sans-serif;
-  --max-w:700px;
-  --intro-grad:linear-gradient(180deg,#fff3e0 0%,#ffe0b2 100%);
-  --belief-bg:#fffefc;
-  --about-bg:#f3f3f3;
-  --values-bg:#e0f7fa;
-  --contact-bg:#ede7f6;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;font-family:var(--font);scroll-behavior:smooth;}
-.container{
-  height:100%;
-  overflow-y:scroll;
-  scroll-snap-type:y mandatory;
-}
-section{
-  height:100vh;
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  scroll-snap-align:start;
-  text-align:center;
-  padding:0 1rem;
-}
-.content{max-width:var(--max-w);margin:auto;}
-h1{font-weight:700;font-size:clamp(1.8rem,5vw,3rem);margin-bottom:1rem;}
-h2{font-weight:400;font-size:clamp(1rem,3.5vw,1.5rem);line-height:1.5;}
-p{font-size:clamp(1rem,3.5vw,1.25rem);line-height:1.6;margin-bottom:0.8rem;}
-/* section backgrounds */
-#intro{background:var(--intro-grad);}
-#belief{background:var(--belief-bg);}
-#about{background:var(--about-bg);}
-#values{background:var(--values-bg);}
-#contact{background:var(--contact-bg);}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신혼부부 현실 가이드: 최호준 씨 심층 인터뷰</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+        :root {
+            --primary-color: #34495e;
+            --secondary-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-background: #ffffff;
+            --quote-border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 40px 20px;
+            padding: 40px;
+            background-color: var(--card-background);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--quote-border-color);
+            padding-bottom: 25px;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+
+        .interview-section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 15px;
+            margin-bottom: 30px;
+        }
+
+        .qna-block {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            font-weight: 500;
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .question::before {
+            content: 'Q.';
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .answer {
+            padding-left: 28px;
+            border-left: 2px solid var(--quote-border-color);
+        }
+
+        .highlight-quote {
+            background-color: #fdfaf6;
+            border: 1px solid #f3e5d8;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-align: center;
+            color: #d35400;
+        }
+        
+        .details-box {
+            background-color: #f7f9fc;
+            border: 1px solid #e1e8f2;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .details-box h4 {
+            margin-top: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .details-box ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .details-box ul li {
+            padding: 5px 0;
+            border-bottom: 1px dashed var(--quote-border-color);
+        }
+        .details-box ul li:last-child {
+            border-bottom: none;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid var(--quote-border-color);
+            font-size: 0.9em;
+            color: #95a5a6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px 10px;
+                padding: 25px;
+            }
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <!-- 1. Intro -->
-  <section id="intro">
-    <div class="content">
-      <h1>나는 사람 사이의 온기를 믿습니다.</h1>
-      <h2>다정한 말과 눈빛이 세상을 바꾼다고 생각합니다.</h2>
-    </div>
-  </section>
 
-  <!-- 2. Belief -->
-  <section id="belief">
-    <div class="content">
-<p>세상이 거칠수록, 나는 다정함을 더 단단히 붙잡고 싶어졌습니다.</p>
-<p>기술보다 사람, 속도보다 관계를 선택하며 살아가고 있습니다.</p>
-    </div>
-  </section>
+    <div class="container">
+        <header>
+            <h1>어느 신혼부부의 현실 가이드</h1>
+            <p class="subtitle">돈, 부모님, 그리고 사라진 나의 시간에 대하여: 최호준 씨 심층 인터뷰</p>
+        </header>
 
-  <!-- 3. About Me -->
-  <section id="about">
-    <div class="content">
-      <h1>About Me</h1>
-      <p>이름&nbsp;|&nbsp;정해일</p>
-      <p>생년&nbsp;|&nbsp;1998</p>
-      <p>간단 소개&nbsp;|&nbsp;고요한 밤과 바다를 사랑합니다.</p>
-    </div>
-  </section>
+        <main>
+            <section class="interview-section">
+                <h2>주제 1: 양가 지원 및 재정 갈등</h2>
 
-  <!-- 4. Values -->
-  <section id="values">
-    <div class="content">
-      <h1>Values</h1>
-    <p>사랑은 결국, 존재를 증명받고자 하는 가장 인간적인 방식입니다.</p>
-<p>용기는 언제나 두려움의 그림자에서 태어난다는 걸 잊지 않으려 합니다.</p>
-<p>메멘토 모리—언젠가 사라질 운명을 기억할 때, 나는 세상에 잘 보이려는 욕망 대신 진실함을 택합니다.</p>
-<p>고요함은 유한성을 받아들여야만 머무를 수 있는 상태이며, 그 선명함이 오늘의 다정함으로 나를 이끕니다.</p>
-    </div>
-  </section>
+                <div class="qna-block">
+                    <div class="question">신혼집, 혼수 등 고비용 항목에 대한 비용 분담 협의 시, 양가 부모님의 개입이나 그로 인한 갈등은 없었습니까?</div>
+                    <div class="answer">
+                        <p>신혼집 선정 과정에서 양가 부모님의 의견이 갈렸습니다. 저희는 자금이 부족했는데, 부모님들께서는 신축 아파트를 권하셨죠. 그래서 저희가 "회사 사택에 들어가겠다"고 말씀드리니, 자금을 지원해주셨습니다. 그 덕분에 신축 아파트로 신혼집을 마련할 수 있었습니다. 만약 지원이 없었다면 40년 된 사택에서 신혼 생활을 시작했을 겁니다. 혼수의 경우는 전적으로 아내가 모은 돈으로 마련했습니다.</p>
+                    </div>
+                </div>
 
-  <!-- 5. Contact -->
-  <section id="contact">
-    <div class="content">
-      <h1>Contact</h1>
-      <p>Email&nbsp;|&nbsp;jst7501@naver.com</p>
-      <p>GitHub&nbsp;|&nbsp;github.com/jst7501</p>
-      <p>Instagram&nbsp;|&nbsp;@superhaeil</p>
+                <div class="qna-block">
+                    <div class="question">부모님의 금전적 지원 때문에 오히려 갈등이 생기지는 않았나요?</div>
+                    <div class="answer">
+                        <p>자금을 지원해주시는데 갈등이 있을 이유가 없다고 생각합니다. 혼수 역시 저희가 모은 돈으로 해결했기에 부모님 개입이 없었고요. 재정적인 갈등이 발생한다면, 보통 한쪽에서 2억 원을 지원하는데 다른 쪽에서 5천만 원을 지원하는 식의 극단적인 차이가 있을 때 결혼 자체를 재고려하는 상황이 생길 수는 있겠죠. 저희는 그런 문제로 크게 다툰 적은 없습니다.</p>
+                        
+                        <div class="details-box">
+                            <h4>참고: 부모님 개입 및 지원 항목 (본인 사례)</h4>
+                            <ul>
+                                <li><strong>집 지원금:</strong> 저희 쪽(남자 측)에서 최대 1억 5천만 원 지원</li>
+                                <li><strong>예단:</strong> 저는 금목걸이를 받음</li>
+                                <li><strong>결혼식 비용:</strong> 양가 부모님 반반 부담, 식대는 각자 정산</li>
+                                <li><strong>신혼여행 경비:</strong> 저희 쪽에서 300만 원 지원, 아내 쪽은 없음</li>
+                                <li><strong>축의금:</strong> 제 앞으로 들어온 축의금 중 150만 원가량 부모님께 드림</li>
+                            </ul>
+                            <p>이 외에도 <strong>출산 축하금</strong>으로 저희 쪽에서 500만 원을 받았고, 곧 있을 아이 100일에도 저희 아버지는 100만 원이나 금반지 한 돈을 생각하고 계십니다. 개인적으로 <strong>남자 쪽 집안의 경제적 여유가 더 있어야 기죽지 않고 살 수 있다</strong>고 생각하며, 현재 상황에 만족합니다. 다만, 부모님의 지원을 당연하게 여겨서는 안 됩니다. 보통은 다들 자신이 모아놓은 돈으로 하는 것이 맞습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="interview-section">
+                <h2>주제 2: 부부 경제 관리 시스템</h2>
+
+                <div class="qna-block">
+                    <div class="question">현재 부부의 월 소득은 어떻게 관리하고 있습니까?</div>
+                    <div class="answer">
+                        <p>통합 관리를 강력히 추천합니다. 예를 들어 두 사람 모두 300만 원씩 번다면, 250만 원씩 부부 공동 통장에 넣고 나머지 50만 원은 각자 개인 용돈으로 사용하는 방식입니다. 생활비, 적금 등 모든 고정 지출은 부부 통장으로 관리하는 것이 좋습니다. 급여일에 맞춰 공동 통장으로 자동이체하면 편리합니다.</p>
+                    </div>
+                </div>
+
+                <div class="qna-block">
+                    <div class="question">상여금과 같은 비정기 소득은 어떻게 처리합니까?</div>
+                    <div class="answer">
+                        <p>그것이 바로 비상금이 되는 것입니다. 비자금을 조성하는 거죠.</p>
+                    </div>
+                </div>
+
+                <div class="qna-block">
+                    <div class="question">결혼 전 각자 형성한 자산(예적금, 주식 등)은 어떻게 합의했나요?</div>
+                    <div class="answer">
+                        <p>네, <strong>"흡수 합병"</strong>했습니다. 돈에 더 관심이 많은 사람이 관리하는 것이 맞다고 봅니다. 결혼을 결정하면 생각지도 못한 지출이 많아 각자 관리하면 매우 힘듭니다. 보험, 관리비, 공과금 등 신경 쓸 것이 많으니 한 사람이 전담하는 것이 효율적입니다. 개인적으로는 아내분이 관리하는 것을 추천합니다.</p>
+                    </div>
+                </div>
+
+                <div class="qna-block">
+                    <div class="question">결혼을 앞둔 남성에게, '반드시 합의해야 할 재정 원칙' 한 가지만 조언한다면 무엇일까요?</div>
+                    <div class="answer">
+                        <p><strong>'몰래 지출하지 않기'</strong>입니다. 제가 몰래 5만 원어치 실비김치를 주문했다가 아내에게 혼난 경험이 있습니다. 신뢰의 문제입니다.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="interview-section">
+                <h2>주제 3: 가사 분담 및 개인 생활의 변화</h2>
+
+                <div class="qna-block">
+                    <div class="question">가사 분담 시스템과 그에 대한 만족도는 어떻습니까?</div>
+                    <div class="answer">
+                        <p>현재 시스템에 만족합니다. 하지만 가사 노동의 가치나 난이도에 대한 인식을 배우자와 공유하지는 않습니다. 그것은 아내가 알아서 할 일이고, 저는 그냥 하라는 것만 가끔 하면 됩니다.</p>
+                        <div class="highlight-quote">
+                            "솔직히 남자는 집안일이 잘 보이지 않습니다. 어제는 아내가 '배수구에 머리카락 치운 적 있냐'고 묻더군요. 저는 '머리카락이 있어?'라고 답변했습니다. 이것은 실제 상황입니다."
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="qna-block">
+                    <div class="question">결혼 후, 개인으로서의 정체성에 변화를 느낀 적이 있습니까?</div>
+                    <div class="answer">
+                        <p>아니요, 없습니다. 제 정체성은 '남편' 한 개라서 두 개의 정체성 사이에서 오는 혼란은 느낄 수가 없습니다. 굳이 변화를 꼽자면, 리그 오브 레전드(게임)를 못한 지가 좀 됐습니다.</p>
+                    </div>
+                </div>
+
+                <div class="qna-block">
+                    <div class="question">결혼 전과 비교해 개인 시간의 총량은 어떻게 변화했습니까?</div>
+                    <div class="answer">
+                        <p><strong>"유(有)에서 무(無)로 바뀌었다"</strong>고 말씀드리겠습니다.</p>
+                        <p>신혼 생활 자체는 개인 시간을 가질 수 있지만, 저처럼 아이가 태어나면 상황이 달라집니다. 아이가 생기기 전에는 저도 게임을 포함해 할 것은 다 했습니다. 하지만 아이가 태어난 후에는 개인 시간이 완전히 사라졌다고 보면 됩니다. 가끔 게임을 할 때는 아내가 친정에 갔을 때입니다. 여기서 친정의 중요성을 알 수 있습니다.</p>
+                         <div class="highlight-quote">
+                           "신혼집은 처가에서 가장 먼 곳에 구하시길 바랍니다."
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>인터뷰 기록: 정해일 | 자료 제공: 최호준</p>
+            <p>&copy; 2025. All rights reserved.</p>
+        </footer>
     </div>
-  </section>
-</div>
+
 </body>
 </html>
