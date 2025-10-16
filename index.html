@@ -1,664 +1,247 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>결혼, 그 현실에 대하여 - 심층 인터뷰</title>
+    <title>외국인 근로자 산업 안전 설문조사 및 AI 상담</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"
+    />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap");
-
-      :root {
-        --light-bg: #f9f9f9;
-        --light-card-bg: #ffffff;
-        --light-text: #2c3e50;
-        --light-text-secondary: #576574;
-        --light-border: #e8e8e8;
-        --light-accent: #3498db;
-        --light-accent-secondary: #e74c3c;
-        --light-highlight-bg: #fdf6e3;
-        --light-highlight-border: #f1e2b9;
-        --light-highlight-text: #c0932b;
-
-        --dark-bg: #2c3e50;
-        --dark-card-bg: #34495e;
-        --dark-text: #ecf0f1;
-        --dark-text-secondary: #bdc3c7;
-        --dark-border: #4a627a;
-        --dark-accent: #5dade2;
-        --dark-accent-secondary: #f1948a;
-        --dark-highlight-bg: #4a627a;
-        --dark-highlight-border: #5e7b99;
-        --dark-highlight-text: #f5b041;
-
-        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
-      }
-
-      [data-theme="light"] {
-        --bg-color: var(--light-bg);
-        --card-bg-color: var(--light-card-bg);
-        --text-color: var(--light-text);
-        --text-secondary-color: var(--light-text-secondary);
-        --border-color: var(--light-border);
-        --accent-color: var(--light-accent);
-        --accent-secondary-color: var(--light-accent-secondary);
-        --highlight-bg-color: var(--light-highlight-bg);
-        --highlight-border-color: var(--light-highlight-border);
-        --highlight-text-color: var(--light-highlight-text);
-      }
-
-      [data-theme="dark"] {
-        --bg-color: var(--dark-bg);
-        --card-bg-color: var(--dark-card-bg);
-        --text-color: var(--dark-text);
-        --text-secondary-color: var(--dark-text-secondary);
-        --border-color: var(--dark-border);
-        --accent-color: var(--dark-accent);
-        --accent-secondary-color: var(--dark-accent-secondary);
-        --highlight-bg-color: var(--dark-highlight-bg);
-        --highlight-border-color: var(--dark-highlight-border);
-        --highlight-text-color: var(--dark-highlight-text);
-      }
-
-      * {
-        box-sizing: border-box;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      html,
       body {
-        margin: 0;
-        padding: 0;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        font-family: "Noto Sans KR", sans-serif;
-        transition: background-color 0.3s, color 0.3s;
+        font-family: "Inter", sans-serif;
       }
-
-      .container {
-        max-width: 820px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      .header {
-        text-align: center;
-        padding: 40px 20px;
-        position: relative;
-      }
-
-      .header h1 {
-        font-size: 2.8rem;
-        font-weight: 700;
-        margin: 0 0 10px;
-        color: var(--text-color);
-      }
-
-      .header p {
-        font-size: 0.5rem;
-        color: var(--text-secondary-color);
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      #theme-toggle {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: var(--card-bg-color);
-        border: 1px solid var(--border-color);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.3s;
-      }
-      #theme-toggle:hover {
-        transform: scale(1.1);
-      }
-
-      .tab-nav {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 30px;
-      }
-
-      .tab-btn {
-        padding: 12px 24px;
-        font-size: 1rem;
-        font-weight: 500;
-        font-family: "Noto Sans KR", sans-serif;
-        background: transparent;
-        border: 1px solid var(--border-color);
-        border-radius: 20px;
-        color: var(--text-secondary-color);
-        cursor: pointer;
-        transition: all 0.3s;
-      }
-
-      .tab-btn.active {
-        background: var(--accent-color);
-        color: white;
-        border-color: var(--accent-color);
-        font-weight: 700;
-      }
-
-      .interview-content {
-        display: none;
-      }
-
-      .interview-content.active {
-        display: block;
-      }
-
-      .topic-section {
-        background-color: var(--card-bg-color);
-        padding: 30px;
-        border-radius: 12px;
-        margin-bottom: 30px;
-        box-shadow: var(--shadow-md);
-        border: 1px solid var(--border-color);
-      }
-
-      .topic-section h2 {
-        font-size: 1.6rem;
-        font-weight: 700;
-        padding-bottom: 15px;
-        margin: 0 0 25px;
-        border-bottom: 2px solid var(--accent-color);
-        display: inline-block;
-      }
-
-      .qna-block {
-        margin-bottom: 25px;
-      }
-
-      .question {
-        font-size: 1.1rem;
-        font-weight: 500;
-        margin-bottom: 10px;
-        line-height: 1.6;
-      }
-      .question::before {
-        content: "Q.";
-        font-weight: 700;
-        color: var(--accent-color);
-        margin-right: 8px;
-      }
-
-      .answer {
-        font-size: 1rem;
-        color: var(--text-secondary-color);
-        line-height: 1.9;
-        padding-left: 26px;
-      }
-
-      .highlight-quote {
-        margin: 20px 0;
-        padding: 20px;
-        background-color: var(--highlight-bg-color);
-        border-left: 5px solid var(--highlight-text-color);
-        border-radius: 8px;
-      }
-      .highlight-quote p {
-        margin: 0;
-        font-weight: 500;
-        font-style: italic;
-        color: var(--highlight-text-color);
-        line-height: 1.7;
-      }
-
-      .summary-box {
-        background-color: var(--bg-color);
-        padding: 10px;
-        border-radius: 8px;
-        margin: 20px 0;
-        border: 1px solid var(--border-color);
-      }
-      .summary-box h4 {
-        margin: 0 0 15px;
-        font-weight: 700;
-        color: var(--text-color);
-      }
-      .summary-box ul {
-        padding-left: 20px;
-        margin: 0;
-      }
-      .summary-box li {
-        margin-bottom: 8px;
-      }
-
-      footer {
-        text-align: center;
-        padding: 30px 0;
-        color: var(--text-secondary-color);
-        font-size: 0.9rem;
-      }
-
-      /* Mobile responsive adjustments */
-      @media (max-width: 768px) {
-        .header h1 {
-          font-size: 2rem;
-        }
-        .header p {
-          font-size: 1rem;
-        }
-        .container {
-          padding: 10px;
-        }
-        .topic-section {
-          padding: 20px;
-        }
-        .tab-btn {
-          padding: 10px 18px;
-          font-size: 0.9rem;
-        }
+      #ai-response {
+        white-space: pre-wrap;
       }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <header class="header">
-        <button id="theme-toggle">☀️</button>
-        <h1>결혼, 그 현실에 대하여</h1>
-        <p>결혼 선배들의 돈, 갈등, 그리고 현실에 대한 심층 인터뷰</p>
+  <body class="bg-slate-100">
+    <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+      <header class="text-center mb-10">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-800">
+          한국의 일터를 바꾸는 데
+        </h1>
+        <h1
+          class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-800 mt-3"
+        >
+          당신의 목소리가 필요합니다
+        </h1>
+        <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
+          대한민국 산업 현장에는 수십만 외국인 근로자 여러분의 땀과 노력이
+          함께하고 있습니다.<br />
+          더 안전하고 존중받는 일터를 만들기 위해, 우리는 당신과 함께 가고
+          싶습니다.
+        </p>
       </header>
 
-      <nav class="tab-nav">
-        <button class="tab-btn active" data-tab="hojun">
-          최호준 편 (기혼, 자녀 1)
-        </button>
-        <button class="tab-btn" data-tab="seongmu">
-          유성무 편 (동거, 사실혼)
-        </button>
-      </nav>
-
-      <main>
-        <!-- 최호준 인터뷰 -->
-        <div id="hojun-content" class="interview-content active">
-          <section class="topic-section">
-            <h2>주제 1: 양가 지원 및 재정 갈등</h2>
-            <div class="qna-block">
-              <p class="question">
-                신혼집, 혼수 등 고비용 항목 협의 시, <br />양가 부모님의
-                개입이나 갈등은 없었습니까?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  일단, 신혼집 선정에 대해서는 양가 부모님의 의견이
-                  갈렸습니다.<br />
-                  저희는 자금이 부족했는데 자꾸 신축 아파트를 권하셨죠.
-                  <br />그래서 회사 사택에 들어갈 것이라고 말씀드리니,
-                  <br />자금을 지원해주셨습니다.<br />
-                  그 덕분에 신축으로 신혼집을 마련할 수 있었습니다. <br />만약
-                  지원이 없었다면 40년 된 사택에서 신혼 생활을 시작했을
-                  겁니다.<br />
-                  혼수 같은 경우는 아내가 모은 돈으로 마련했습니다.
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                부모님의 금전적 지원 때문에 오히려 갈등이 생기지는 않았나요?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  자금을 지원해주시는데 갈등이 있을 이유가 없다고 생각합니다.
-                  그리고 혼수는 부모님 돈이 아니라 각자 모은 돈으로 하는 것이라
-                  부모님의 개입이 없었습니다. 금전적 갈등이라 함은, 보통
-                  한쪽에서 2억 원을 지원하는데 다른 쪽에서 5천만 원을 지원한다면
-                  결혼을 재고려하는 상황이 발생할 수는 있겠죠.
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                그렇다면 결혼을 준비하면서 재정 문제로 크게 다툰 적은 없다는
-                말씀이시군요.
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  그렇습니다. 일반적으로 부모님의 개입은 <br />
-                  1) 집 지원금, <br />
-                  2) 예단및 폐백 여부, <br />
-                  3) 결혼식 비용 및 식대, <br />
-                  4) 신혼여행 경비, <br />
-                  5)축의금 귀속 등 <br />
-                  크게 다섯 가지 항목에서 이루어집니다. <br />저희의 경우를
-                  구체적으로 말씀드리면
-                </p>
-                <div class="summary-box">
-                  <h4>참고: 부모님 개입 및 지원 항목</h4>
-                  <ul>
-                    <li>
-                      <b>집 지원금:</b> 양가 각각 1억 5천만 원을 지원받았습니다.
-                    </li>
-                    <li><b>예단:</b> 저는 금목걸이를 받았습니다.</li>
-                    <li>
-                      <b>결혼식 비용:</b> 양가 부모님께서 반반 부담하셨고,
-                      식대는 각자 하객 수에 따라 정산했습니다.
-                    </li>
-                    <li>
-                      <b>신혼여행 경비:</b> 저희 쪽에서 300만 원을 지원받았고,
-                      아내 쪽에서는 없었습니다.
-                    </li>
-                    <li>
-                      <b>축의금:</b> 제 앞으로 들어온 축의금 중 150만 원가량을
-                      지원 받았고, 아내 쪽은 없었습니다.
-                    </li>
-                  </ul>
-                  <p style="font-size: small">
-                    이 외에도 출산 축하금으로 저희 쪽에서 500만 원을 받았고, 곧
-                    있을 아이 100일에도 저희 아버지는 100만 원이나 금반지 한
-                    돈을 생각하고 계십니다. 현재 상황에 만족합니다.
-                  </p>
-                  <p style="font-size: small">
-                    다만 착각해서는 안 될 점이 있는데, 집이든 혼수든 부모님의
-                    지원을 받는 것이 당연한 것은 아닙니다. 보통은 다들 자신이
-                    모아놓은 돈으로 합니다.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section class="topic-section">
-            <h2>주제 2: 부부 경제 관리 시스템</h2>
-            <div class="qna-block">
-              <p class="question">
-                현재 부부의 월 소득은 어떻게 관리하고 있습니까?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  통합 관리를 추천합니다. 예를 들어 두 사람 모두 300만 원씩
-                  번다면, 250만 원씩 부부 공동 통장에 넣고 나머지 50만 원은 각자
-                  개인 용돈으로 사용하는 방식입니다. 생활비나 적금 등은 모두
-                  부부 통장으로 관리하는 것이 좋습니다. 급여가 들어오면 해당
-                  금액만큼 공동 통장으로 자동이체하면 됩니다.
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                그럼 상여금과 같은 비정기 소득은<br />
-                어떻게 처리합니까?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  그것이 비상금이 되는 것입니다. <br />비자금을 조성하는 거죠.
-                </p>
-                <blockquote class="highlight-quote">
-                  <p>"현재 650만원 정도 있네요"</p>
-                </blockquote>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                결혼 전 각자 형성한 자산(예적금, 주식, 부동산 등)은 공동
-                자산으로 합의했나요?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  네, <strong>흡수합병</strong> 했습니다. 돈에 더 관심이 많은
-                  사람이 관리하는 것이 맞다고 봅니다. 결혼을 결정하고 나면
-                  생각지도 못한 지출이 많기 때문에, 두 사람이 각자 관리하면 매우
-                  힘듭니다. 보험, 관리비, 공과금 등 신경 쓸 것이 많아 한 사람이
-                  전담하는 것이 효율적입니다.<br />
-                  <blockquote class="highlight-quote">
-                    <p>"개인적으로 정승태씨는 아내분이<br/> 관리하는 것을 강력하게
-                        추천합니다."</p>
-                  </blockquote>
-              
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                경조사비나 부모님 용돈 등 비정기적 지출에 대한 원칙이나 한도가
-                설정되어 있습니까?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  부모님 용돈은 따로 드리지 않습니다. 경조사비의 경우, 일찍
-                  결혼하면 이미 받은 것이 있으니 받은 만큼만 돌려주면 되기
-                  때문에 다툴 이유가 없습니다. 이것이 일찍 결혼하는 것의 큰
-                  장점입니다. 부모님 명절 선물 같은 것은 양가에 똑같이 해드리면
-                  되고, 만약 몰래 더 챙겨드리고 싶을 때 비상금을 활용하면
-                  됩니다.
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                결혼을 앞둔 남성에게, '배우자와 반드시 사전에 합의해야 할 재정
-                원칙'을 한 가지만 제시한다면 무엇이겠습니까?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  <strong>'몰래 지출하지 않기'</strong>가 중요하다고 생각합니다.
-                  제가 몰래 5만 원어치 실비김치를 주문했다가 아내에게 혼난
-                  경험이 있습니다.
-                </p>
-              </div>
-            </div>
-          </section>
-          <section class="topic-section">
-            <h2>주제 3: 가사 분담 및 개인 생활의 변화</h2>
-            <div class="qna-block">
-              <p class="question">
-                현재 가사 분담 시스템에 대해 본인은 만족하십니까? 또한 가사
-                노동의 가치와 난이도에 대해 배우자와 비슷한 수준의 인식을
-                공유하고 있다고 판단하십니까?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  현재 시스템에 만족합니다. 하지만 가사 노동의 가치와 난이도에
-                  대한 인식은 공유 받지 않습니다. 저는 그냥 하라는 것만 가끔
-                  하면 됩니다.
-                </p>
-                <blockquote class="highlight-quote">
-                  <p>
-                    "솔직히 남자는 집안일이 잘 보이지 않습니다. 어제는 아내가
-                    '배수구에 머리카락 치운 적 있냐'고 묻더군요. 저는
-                    '머리카락이 있어?'라고 답변했습니다. 이것은 실제 상황입니다.
-                    여성의 눈에만 보이는 집안일이 분명히 존재합니다."
-                  </p>
-                </blockquote>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                결혼 후, '개인'으로서의 정체성과 '남편'으로서의 정체성 사이에서
-                혼란이나 변화를 느낀 적이 있습니까?
-              </p>
-              <div class="answer">
-                <p style="font-size: small">
-                  아니요, 없습니다. 제 정체성은 <strong>'남편'</strong> 한 개라서 <br/>두 정체성
-                  사이에서 오는 혼란은 느낄 수가 없습니다. 
-                </p>
-                <blockquote class="highlight-quote">
-                    <p>
-                        굳이 변화를 꼽자면, <br/>
-                        리그 오브 레전드(게임)를 못한 지가 좀 됐습니다.
-                    </p>
-                  </blockquote>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                그렇다면 마지막 질문입니다. 결혼 전과 비교했을 때, 본인의 개인
-                시간(운동, 취미, 휴식 등)의 총량은 어떻게 변화했습니까?
-              </p>
-              <div class="answer">
-                <p>유(有)에서 무(無)로 바뀌었다고 말씀드리겠습니다.</p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                가끔 게임을 하실 때는 어떻게 하시는 건가요?
-              </p>
-              <div class="answer">
-                <p>
-                  그럴 때는 아내가 친정에 갔을 때입니다. 신혼 생활 자체는 개인
-                  시간을 가질 수 있지만, 저처럼 아이가 태어나면 상황이
-                  달라집니다. 아이가 생기기 전에는 저도 게임을 포함해 할 것은 다
-                  했습니다. 하지만 아이가 태어난 후에는 개인 시간이 사라졌다고
-                  보면 됩니다. 여기서 친정의 중요성을 알 수 있습니다.
-                </p>
-                <blockquote class="highlight-quote">
-                  <p>"신혼집은 처가에서 가장 먼 곳에 구하시길 바랍니다."</p>
-                </blockquote>
-              </div>
-            </div>
-          </section>
+      <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-indigo-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-uz mr-3"></span> Oʻzbekiston
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            Biz siz bilan birga xavfsizroq ish joyini yaratmoqchimiz.
+          </p>
+          <a
+            href="https://forms.gle/P2Kznjdx3EaoDZx87"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out text-lg"
+          >
+            So'rovnomada ishtirok eting
+          </a>
         </div>
 
-        <!-- 유성무 인터뷰 -->
-        <div id="seongmu-content" class="interview-content">
-          <section class="topic-section">
-            <h2>주제 1: 재정 관리 시스템 및 운영 철학</h2>
-            <div class="qna-block">
-              <p class="question">
-                월급을 포함한 자산을 연인이 관리하게 된 배경과 현재 시스템에
-                대해 설명해주세요.
-              </p>
-              <div class="answer">
-                <p>
-                  현재의 재정 관리 시스템은 동거를 시작하면서 자연스럽게
-                  형성되었습니다. 연인이 저보다 생활력이 강하고 자금 관리에
-                  뛰어나다는 믿음이 있었고, 저 또한 충동적인 소비 성향이 있다는
-                  점을 인지하고 있었기 때문입니다.
-                </p>
-                <p>
-                  초기에는 공동 계좌 방식이었으나, 수시로 송금하는 과정이
-                  비효율적이라 판단했습니다. 이에 편의성을 위해 제 월급의
-                  대부분(월 350만 원 중 300만 원)을 연인에게 일괄 이체하고
-                  관리를 전적으로 위임하게 되었습니다. 나머지 50만 원은 개인
-                  용돈으로 사용하고 있습니다. 연인이 체계적으로 자금을
-                  관리해주고, 제 급여의 일부를 별도로 저축해주는 등 신뢰를 주어
-                  현재 방식에 만족도가 매우 높습니다.
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                연인 관계에서의 재정 통합에 대한 개인적인 철학이 있나요?
-              </p>
-              <div class="answer">
-                <p>
-                  개인적으로, 경제적으로 독립된 두 사람이 진지한 관계를 이어가는
-                  과정에서 '네 돈'과 '내 돈'을 엄격하게 구분하는 것은 관계에
-                  부정적인 영향을 미칠 수 있다고 생각합니다. 한쪽이 자신의
-                  자산을 아끼기 위해 상대방의 지출을 유도하는 상황이 발생하면
-                  신뢰가 손상될 수 있습니다. 재정을 합치고 공동의 목표를 위해
-                  함께 관리하는 것은 서로가 경제 공동체이자 삶의 동반자라는
-                  인식을 강화하는 중요한 과정이라고 믿습니다.
-                </p>
-              </div>
-            </div>
-          </section>
-          <section class="topic-section">
-            <h2>주제 2: 갈등 관리 및 해결 방식</h2>
-            <div class="qna-block">
-              <p class="question">
-                연인과 갈등이 생겼을 때, 주로 어떻게 해결하는 편인가요?
-              </p>
-              <div class="answer">
-                <p>
-                  갈등이 많습니다. 솔직히 사소한 일로 거의 매일 다투지만, 길게
-                  이어지지 않습니다. 화가 날 때마다 '이 사람에게 자존심을 부리고
-                  화를 내서 내가 얻는 것이 무엇인가'를 생각해보면, 결국 사과하게
-                  되더군요.
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                갈등의 양상은 관계의 시기에 따라 어떻게 변화했나요?
-              </p>
-              <div class="answer">
-                <p>
-                  오히려 연애 초기에는 거의 싸우지 않았습니다. 스트레스가 싫어서
-                  제가 먼저 미안하다고 말하고 상황을 마무리했기 때문입니다.
-                  하지만 이 사람과 진지하게 결혼을 생각하고 평생을 함께해야
-                  한다는 관점에서 '내가 과연 평생을 참고 살 수 있을까?' 하는
-                  의문이 들었습니다. 그 후로는 제 의견을 명확히 표현하기
-                  시작했고, 약 서너 달간은 거의 매일같이 싸하며 서로를 맞춰가는
-                  과정을 거쳤습니다.
-                </p>
-              </div>
-            </div>
-            <div class="qna-block">
-              <p class="question">
-                현재 갈등이 발생했을 때의 해결 방식이나 원칙이 있다면?
-              </p>
-              <div class="answer">
-                <p>
-                  핵심은 <strong>'논리적인 대화'</strong>와
-                  <strong>'냉각기'</strong>입니다. 상대가 감정적으로 흥분한
-                  상태일지라도, 제가 침착하게 제 의견을 설명하면 결국 상대도
-                  수긍합니다. 만약 다툼이 격해져 언성이 높아지면, "조금 있다가
-                  다시 얘기하자"고 제안하며 잠시 거리를 둡니다. 감정이 진정된
-                  후에 다시 대화를 시작하면 원만하게 풀리는 경우가 대부분입니다.
-                </p>
-                <blockquote class="highlight-quote">
-                  <p>
-                    "사과를 할 때는 '미안해'에서 끝나야 합니다. 여기에
-                    '...한데'와 같이 부가 설명이 붙으면, 그것은 변명이 되고 다시
-                    싸움의 원인이 될 수 있습니다. 변명 없는 온전한 사과가
-                    중요합니다."
-                  </p>
-                </blockquote>
-              </div>
-            </div>
-          </section>
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-emerald-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-cn mr-3"></span> 中国
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            我们希望与您一起创造一个更安全的工作场所。
+          </p>
+          <a
+            href="https://forms.gle/gk3eCNz4ZNdwKXjt6"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-emerald-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-emerald-700 transition duration-300 ease-in-out text-lg"
+          >
+            参与问卷调查
+          </a>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-red-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-vn mr-3"></span> Việt Nam
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            Chúng tôi muốn tạo ra một nơi làm việc an toàn hơn cùng với bạn.
+          </p>
+          <a
+            href="https://forms.gle/sVEbLsPUNm2cPBfB9"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-red-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out text-lg"
+          >
+            Tham gia khảo sát
+          </a>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-blue-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-np mr-3"></span> नेपाल
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            हामी तपाईंसँग मिलेर सुरक्षित कार्यस्थल बनाउन चाहन्छौं।
+          </p>
+          <a
+            href="https://forms.gle/E4spyCbk9yzT2jsE6"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
+          >
+            सर्वेक्षणमा भाग लिनुहोस्
+          </a>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-cyan-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-kh mr-3"></span> កម្ពុជា
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            យើងចង់สร้างកន្លែងការងារដែលមានសុវត្ថិភាពជាងមុនជាមួយអ្នក។
+          </p>
+          <a
+            href="https://forms.gle/qKh1ZWaqRWoUdoLt5"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-cyan-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-cyan-700 transition duration-300 ease-in-out text-lg"
+          >
+            ចូលរួមការស្ទង់មតិ
+          </a>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-orange-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-id mr-3"></span> Indonesia
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            Kami ingin menciptakan tempat kerja yang lebih aman bersama Anda.
+          </p>
+          <a
+            href="https://forms.gle/hAMkWzrtGnBxgMtw9"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-orange-700 transition duration-300 ease-in-out text-lg"
+          >
+            Ikuti Survei
+          </a>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-sky-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-us mr-3"></span> English
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            We want to create a safer workplace with you.
+          </p>
+          <a
+            href="https://forms.gle/TPE6PG7QxmzfGvKFA"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-sky-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-sky-700 transition duration-300 ease-in-out text-lg"
+          >
+            Take the Survey
+          </a>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-teal-600 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-th mr-3"></span> ไทย
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            เราต้องการสร้างสถานที่ทำงานที่ปลอดภัยยิ่งขึ้นไปกับคุณ
+          </p>
+          <a
+            href="https://forms.gle/Fo3fuAYA9AJXBhjZ7"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-teal-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-teal-700 transition duration-300 ease-in-out text-lg"
+          >
+            ทำแบบสำรวจ
+          </a>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition duration-300 hover:shadow-xl hover:-translate-y-1"
+        >
+          <h2
+            class="text-2xl font-bold text-yellow-500 mb-3 flex items-center justify-center"
+          >
+            <span class="fi fi-ph mr-3"></span> Pilipinas
+          </h2>
+          <p class="text-slate-700 mb-6 h-16 flex items-center">
+            Nais naming lumikha ng isang mas ligtas na lugar ng trabaho kasama
+            ka.
+          </p>
+          <a
+            href="https://forms.gle/K1hUD8ALbykDGjvE9"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-yellow-500 text-white font-semibold py-3 px-4 rounded-lg hover:bg-yellow-600 transition duration-300 ease-in-out text-lg"
+          >
+            Sagutan ang Survey
+          </a>
         </div>
       </main>
 
-      <footer>
-        <p>자료 제공: 최호준, 유성무 | 인터뷰 및 정리: 정해일</p>
-        <p>&copy; 2025. All rights reserved.</p>
+      <footer class="text-center mt-12 text-gray-500 text-sm">
+        <p>
+          본 설문조사의 모든 답변은 익명으로 처리되며, 통계적 목적으로만
+          사용됩니다.
+        </p>
+        <p class="mt-1">참여해주셔서 진심으로 감사합니다.</p>
       </footer>
     </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".tab-btn");
-        const contents = document.querySelectorAll(".interview-content");
-        const themeToggle = document.getElementById("theme-toggle");
-        const htmlEl = document.documentElement;
-
-        // Tab functionality
-        tabs.forEach((tab) => {
-          tab.addEventListener("click", () => {
-            tabs.forEach((item) => item.classList.remove("active"));
-            contents.forEach((item) => item.classList.remove("active"));
-
-            tab.classList.add("active");
-            document
-              .getElementById(tab.dataset.tab + "-content")
-              .classList.add("active");
-          });
-        });
-
-        // Theme toggle functionality
-        const savedTheme = localStorage.getItem("theme") || "light";
-        htmlEl.setAttribute("data-theme", savedTheme);
-        themeToggle.textContent = savedTheme === "light" ? "🌙" : "☀️";
-
-        themeToggle.addEventListener("click", () => {
-          const currentTheme = htmlEl.getAttribute("data-theme");
-          const newTheme = currentTheme === "light" ? "dark" : "light";
-          htmlEl.setAttribute("data-theme", newTheme);
-          themeToggle.textContent = newTheme === "light" ? "🌙" : "☀️";
-          localStorage.setItem("theme", newTheme);
-        });
-      });
-    </script>
   </body>
 </html>
