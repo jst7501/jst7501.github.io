@@ -6,11 +6,17 @@ export function MyTab() {
   const { nickname, carModel, experienceYears } = useUserStore();
 
   return (
-    <div className="flex flex-col h-full bg-bg-base overflow-y-auto hide-scrollbar scroll-smooth">
-      <div className="sticky top-0 z-30 pt-16 pb-4 bg-bg-base/80 backdrop-blur-2xl border-b border-border-subtle shadow-[0_10px_30px_rgba(0,0,0,0.8)] px-6 flex justify-between items-center">
-        <h2 className="text-3xl font-black text-white">마이페이지👤</h2>
-        <button className="p-2 text-text-secondary hover:text-white transition-colors">
-          <Settings size={22} />
+    <div className="flex flex-col h-full bg-[#050505] overflow-y-auto hide-scrollbar scroll-smooth">
+      {/* Premium Glass Header */}
+      <div className="sticky top-0 z-[100] pt-14 pb-5 bg-[#050505]/60 backdrop-blur-3xl border-b border-white/5 shadow-[0_12px_40px_rgba(0,0,0,0.6)] px-6 flex justify-between items-center">
+        <div className="flex flex-col">
+          <h2 className="text-2xl font-black tracking-tighter text-white">
+            PROFILE<span className="text-primary">.</span>
+          </h2>
+          <span className="text-[10px] font-bold text-white/30 tracking-[0.2em] -mt-1 ml-0.5">마이페이지</span>
+        </div>
+        <button className="w-11 h-11 hyper-glass rounded-2xl flex items-center justify-center text-white/60 hover:text-white transition-all transform active:scale-95 shadow-lg inner-glow">
+          <Settings size={20} />
         </button>
       </div>
 

@@ -31,27 +31,30 @@ export function ExploreHeader() {
   }, []);
 
   return (
-    <div className={`sticky top-0 z-30 transition-all duration-500 pt-12 pb-3 flex flex-col gap-5 ${
-      isScrolled ? 'bg-bg-base/80 backdrop-blur-2xl border-b border-border-subtle shadow-[0_10px_30px_rgba(0,0,0,0.8)]' : 'bg-transparent'
+    <div className={`sticky top-0 z-[100] transition-all duration-700 pt-14 pb-5 flex flex-col gap-6 ${
+      isScrolled ? 'bg-[#050505]/60 backdrop-blur-3xl border-b border-white/5 shadow-[0_12px_40px_rgba(0,0,0,0.6)]' : 'bg-transparent'
     }`}>
       
       {/* Top Bar: Logo & Notification */}
       <div className="flex items-center justify-between px-6">
-        <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary via-[#FF9D00] to-primary tracking-tighter">
-          WINDING<span className="text-white">NAVI</span>
-        </h1>
-        <button className="p-2.5 bg-bg-surface-elevated rounded-full border border-border-subtle text-text-secondary hover:text-white transition-all transform hover:scale-105 active:scale-95 relative shadow-lg">
-          <Bell size={20} />
-          <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-error border-2 border-bg-surface-elevated rounded-full animate-pulse" />
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-black tracking-tighter text-white">
+            WINDING<span className="text-primary">.</span>
+          </h1>
+          <span className="text-[10px] font-bold text-white/30 tracking-[0.2em] -mt-1 ml-0.5">EXPLORE HUB</span>
+        </div>
+        <button className="w-11 h-11 hyper-glass rounded-2xl flex items-center justify-center text-white/60 hover:text-white transition-all transform hover:scale-105 active:scale-95 relative shadow-lg inner-glow">
+          <Bell size={18} strokeWidth={2.5} />
+          <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-primary border-2 border-[#050505] rounded-full shadow-[0_0_10px_rgba(255,90,0,0.6)]" />
         </button>
       </div>
 
-      {/* Cyberpunk Search Input */}
+      {/* Premium Search Field */}
       <div className="px-6 relative group">
-        <div className="absolute inset-0 bg-primary/20 rounded-[20px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none mx-6" />
-        <div className="relative flex items-center w-full bg-bg-surface border border-border-strong rounded-[20px] transition-all duration-300 focus-within:border-primary focus-within:bg-bg-surface-elevated shadow-inner">
-          <div className="absolute left-4 text-text-tertiary group-focus-within:text-primary transition-colors">
-            <Search size={20} />
+        <div className="absolute inset-x-6 inset-y-0 bg-primary/10 rounded-[22px] blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-700 pointer-events-none" />
+        <div className="relative flex items-center w-full bg-white/[0.03] border border-white/10 rounded-[22px] transition-all duration-500 focus-within:border-primary/50 focus-within:bg-white/[0.06] shadow-2xl backdrop-blur-md overflow-hidden inner-glow">
+          <div className="absolute left-4.5 text-white/30 group-focus-within:text-primary transition-colors duration-500">
+            <Search size={18} strokeWidth={3} />
           </div>
           <input
             type="text"

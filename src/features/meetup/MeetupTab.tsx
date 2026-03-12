@@ -18,21 +18,26 @@ export function MeetupTab() {
   ];
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto hide-scrollbar scroll-smooth">
-      {/* Heavy Cyberpunk Header */}
-      <div className="sticky top-0 z-30 pt-16 pb-4 bg-bg-base/80 backdrop-blur-2xl border-b border-border-subtle shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-        <div className="px-6 flex justify-between items-center mb-5">
-          <h2 className="text-3xl font-black text-white text-glow">번개🔥</h2>
+    <div className="flex flex-col h-full bg-[#050505] overflow-y-auto hide-scrollbar scroll-smooth">
+      {/* Premium Glass Header */}
+      <div className="sticky top-0 z-[100] pt-14 pb-5 bg-[#050505]/60 backdrop-blur-3xl border-b border-white/5 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+        <div className="px-6 flex justify-between items-center mb-6">
+          <div className="flex flex-col">
+            <h2 className="text-2xl font-black tracking-tighter text-white">
+              MEETUP<span className="text-primary">.</span>
+            </h2>
+            <span className="text-[10px] font-bold text-white/30 tracking-[0.2em] -mt-1 ml-0.5">번개 모임</span>
+          </div>
           <button 
             onClick={() => setIsCreateOpen(true)}
-            className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-[#FFCC00] flex items-center justify-center text-white shadow-[0_0_20px_rgba(255,90,0,0.4)] hover:scale-110 active:scale-95 transition-transform"
+            className="w-12 h-12 rounded-2xl bg-gradient-to-r from-primary to-[#FF9D00] flex items-center justify-center text-white shadow-[0_12px_30px_rgba(255,90,0,0.3)] animate-press active:scale-90 transition-all inner-glow"
           >
-            <Plus size={24} />
+            <Plus size={24} strokeWidth={3} />
           </button>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2.5 overflow-x-auto hide-scrollbar px-6 snap-x">
+        <div className="flex gap-2.5 overflow-x-auto hide-scrollbar px-6 snap-x pb-4">
           {FILTERS.map(f => (
             <div key={f} className="snap-start shrink-0">
                <Tag 

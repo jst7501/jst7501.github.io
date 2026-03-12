@@ -17,10 +17,15 @@ export function LogTab() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-bg-base overflow-y-auto hide-scrollbar scroll-smooth">
-      {/* Heavy Cyberpunk Header */}
-      <div className="sticky top-0 z-30 pt-16 pb-4 bg-bg-base/80 backdrop-blur-2xl border-b border-border-subtle shadow-[0_10px_30px_rgba(0,0,0,0.8)] px-6">
-        <h2 className="text-3xl font-black text-white text-glow">러너 로그🏁</h2>
+    <div className="flex flex-col h-full bg-[#050505] overflow-y-auto hide-scrollbar scroll-smooth">
+      {/* Premium Glass Header */}
+      <div className="sticky top-0 z-[100] pt-14 pb-5 bg-[#050505]/60 backdrop-blur-3xl border-b border-white/5 shadow-[0_12px_40px_rgba(0,0,0,0.6)] px-6">
+        <div className="flex flex-col">
+          <h2 className="text-2xl font-black tracking-tighter text-white">
+            RUNNER LOG<span className="text-primary">.</span>
+          </h2>
+          <span className="text-[10px] font-bold text-white/30 tracking-[0.2em] -mt-1 ml-0.5">내 주행 기록</span>
+        </div>
       </div>
 
       <div className="p-6 pb-40 flex flex-col gap-8">

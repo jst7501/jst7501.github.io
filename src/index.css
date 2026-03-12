@@ -61,26 +61,48 @@
 }
 
 @layer utilities {
-  /* 2026 Trend: Hyper-Glassmorphism */
+  /* Refined Glassmorphism - Apple Style 2026 */
   .hyper-glass {
-    background: var(--color-glass-base);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--color-border-subtle);
-    box-shadow: inset 0 1px 0 0 var(--color-glass-highlight), 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    background: rgba(20, 20, 22, 0.6);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.05),
+      0 4px 24px -1px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-frosted {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Premium Inner Glow for Cards */
+  .inner-glow {
+    position: relative;
+  }
+  .inner-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
   }
 
   /* Signature Gradient Text */
   .text-glow {
-    background: linear-gradient(135deg, #FF5A00 0%, #FFCC00 100%);
+    background: linear-gradient(135deg, #FF5900 0%, #FF9D00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 0 30px rgba(255, 90, 0, 0.3);
+    filter: drop-shadow(0 0 15px rgba(255, 89, 0, 0.25));
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #FF5A00 0%, #FFCC00 100%);
+    background: linear-gradient(135deg, #FF5900 0%, #FFCC00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -88,10 +110,10 @@
 
   /* Micro Animations */
   .animate-press {
-    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   .animate-press:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
   }
 
   /* Hide Scrollbar seamlessly */
@@ -105,16 +127,17 @@
 
   /* Bento Box Standard Wrapper */
   .bento-card {
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: 24px;
-    transition: all 0.3s ease;
+    background: rgba(18, 18, 22, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .bento-card:hover {
-    background: var(--color-bg-surface-elevated);
-    border-color: var(--color-border-strong);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+    background: rgba(22, 22, 28, 0.8);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6);
   }
 }
 
