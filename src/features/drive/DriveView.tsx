@@ -382,141 +382,104 @@ export function DriveView({ route, onEnd }: DriveViewProps) {
       </div>
 
       {/* ── 하단 대시보드 — 게임 HUD 스타일 ── */}
+      {/* ── 하단 대시보드 — M-Performance 대시보드 ── */}
       <div
         style={{
-          background: 'linear-gradient(180deg, #0A0A0C 0%, #050506 100%)',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          padding: '16px 20px 32px',
+          background: 'linear-gradient(180deg, #0A0A0C 0%, #020202 100%)',
+          borderTop: '2px solid rgba(255,255,255,0.05)',
+          padding: '20px 20px 32px',
           position: 'relative',
           overflow: 'hidden',
+          boxShadow: '0 -20px 50px rgba(0,0,0,0.8)',
         }}
       >
-        {/* 속도 기반 배경 accent */}
+        {/* M-Stripes 테두리 */}
+        <div className="absolute top-0 left-0 w-full h-[3px] flex">
+          <div className="h-full w-1/3 bg-[#0092D0]" />
+          <div className="h-full w-1/3 bg-[#113162]" />
+          <div className="h-full w-1/3 bg-[#FF0000]" />
+        </div>
+
+        {/* 배경 다이내믹 글로우 */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none opacity-40 blur-[80px]"
           style={{
-            background: `radial-gradient(ellipse at 50% 0%, ${speedColor}${Math.round(speedIntensity * 15).toString(16).padStart(2, '0')} 0%, transparent 70%)`,
+            background: `radial-gradient(circle at 50% 100%, ${speedColor}20 0%, transparent 80%)`,
             transition: 'background 0.5s ease',
           }}
         />
 
-        {/* 메인 속도 디스플레이 */}
-        <div className="relative flex items-end justify-center gap-1.5 mb-4">
-          <span
-            className="tabular-nums tracking-tighter leading-none"
-            style={{
-              fontSize: 64,
-              fontWeight: 900,
-              color: speedColor,
-              textShadow: `0 0 40px ${speedColor}50, 0 0 80px ${speedColor}20`,
-              transition: 'color 0.2s, text-shadow 0.2s',
-            }}
-          >
-            {speedKmh}
-          </span>
-          <span
-            style={{
-              fontSize: 18,
-              fontWeight: 700,
-              color: 'rgba(255,255,255,0.3)',
-              marginBottom: 8,
-            }}
-          >
-            km/h
-          </span>
+        {/* 상단 스탯 로우: 경과시간 | G | 콤보 */}
+        <div className="relative grid grid-cols-3 gap-3 mb-6">
+           <div className="bg-white/5 border border-white/10 rounded-2xl p-3 flex flex-col items-center">
+              <span className="text-[9px] font-black text-white/30 tracking-widest uppercase mb-1">Session</span>
+              <span className="text-xl font-black text-white italic tabular-nums">{formatTime(elapsedMs)}</span>
+           </div>
+           <div className="bg-white/5 border border-white/10 rounded-2xl p-3 flex flex-col items-center">
+              <span className="text-[9px] font-black text-white/30 tracking-widest uppercase mb-1">Lateral G</span>
+              <span className="text-xl font-black text-blue-400 italic tabular-nums">{gForce.totalG.toFixed(2)}</span>
+           </div>
+           <div className="bg-white/5 border border-white/10 rounded-2xl p-3 flex flex-col items-center">
+              <span className="text-[9px] font-black text-white/30 tracking-widest uppercase mb-1">Peak G</span>
+              <span className="text-xl font-black text-red-500 italic tabular-nums">0.00</span>
+           </div>
         </div>
 
-        {/* 속도 바 (RPM 게이지 느낌) */}
-        <div
-          style={{
-            height: 4,
-            borderRadius: 2,
-            background: 'rgba(255,255,255,0.05)',
-            marginBottom: 16,
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              height: '100%',
-              width: `${Math.min(100, (speedKmh / 160) * 100)}%`,
-              background: `linear-gradient(90deg, #10B981, #F59E0B, #FF5A00, #EF4444)`,
-              borderRadius: 2,
-              transition: 'width 0.3s ease',
-              boxShadow: `0 0 12px ${speedColor}80`,
-            }}
-          />
+        {/* 메인 속도 센터 : Slanted Typography */}
+        <div className="relative flex flex-col items-center mb-6">
+           <div className="flex items-baseline gap-2">
+              <span 
+                className="text-7xl font-black italic tracking-tighter"
+                style={{ 
+                  color: '#fff',
+                  textShadow: `0 0 30px ${speedColor}40`,
+                  transition: 'color 0.2s'
+                }}
+              >
+                {speedKmh}
+              </span>
+              <span className="text-xl font-black text-white/20 italic">KM/H</span>
+           </div>
+           
+           {/* 세그먼트 스피드 마커 (RPM 게이지 느낌) */}
+           <div className="mt-3 flex gap-1 w-full max-w-sm h-2.5">
+              {Array.from({ length: 40 }).map((_, i) => (
+                <div 
+                  key={i}
+                  className="flex-1 rounded-[1px] transition-all duration-150"
+                  style={{
+                    backgroundColor: (speedKmh / 160) * 40 > i 
+                      ? (i > 32 ? '#EF4444' : i > 25 ? '#F59E0B' : '#3B82F6')
+                      : 'rgba(255,255,255,0.05)',
+                    transform: 'skewX(-15deg)',
+                    boxShadow: (speedKmh / 160) * 40 > i ? '0 0 8px currentColor' : 'none'
+                  }}
+                />
+              ))}
+           </div>
         </div>
 
-        {/* 3열 스탯 — 글래스 카드 */}
-        <div className="relative grid grid-cols-3 gap-2.5 mb-4">
-          <GlassHudStat icon={<Timer size={14} />} label="경과" value={formatTime(elapsedMs)} color="#14B8A6" />
-          <GlassHudStat icon={<Zap size={14} />} label="G" value={`${gForce.totalG.toFixed(2)}`} color="#F59E0B" />
-          <GlassHudStat icon={<Navigation size={14} />} label="콤보" value={`${comboCount}x`} color="#FF5A00" />
-        </div>
-
-        {/* 버튼 */}
-        <div className="relative flex gap-2">
+        {/* 컨트롤 버튼 그룹 */}
+        <div className="relative flex gap-3">
           <button
             onClick={() => isPaused ? resumeDrive() : pauseDrive()}
-            style={{
-              flex: 1,
-              padding: '12px 0',
-              borderRadius: 16,
-              background: 'rgba(255,255,255,0.04)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 14,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 6,
-              cursor: 'pointer',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
-            }}
+            className="flex-[1.5] py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-sm italic tracking-widest flex items-center justify-center gap-2 hover:bg-white/10 active:scale-95 transition-all"
           >
-            {isPaused ? <><Play size={16} /> 재개</> : <><Pause size={16} /> 정지</>}
+            {isPaused ? <><Play size={18} fill="currentColor" /> RESUME</> : <><Pause size={18} fill="currentColor" /> PAUSE</>}
           </button>
+          
           <button
             onClick={() => setShowHud(true)}
-            style={{
-              padding: '12px 14px',
-              borderRadius: 16,
-              background: 'rgba(139,92,246,0.12)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(139,92,246,0.2)',
-              color: '#A78BFA',
-              fontWeight: 700,
-              fontSize: 14,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 5,
-              cursor: 'pointer',
-            }}
+            className="flex-1 py-4 rounded-2xl bg-blue-600/10 border border-blue-500/20 text-blue-400 font-black text-sm italic tracking-widest flex items-center justify-center gap-2 hover:bg-blue-600/20 active:scale-95 transition-all"
           >
-            <Monitor size={16} /> HUD
+            <Monitor size={18} /> HUD
           </button>
+
           <button
             onClick={handleEnd}
-            style={{
-              padding: '12px 20px',
-              borderRadius: 16,
-              background: 'linear-gradient(135deg, #EF4444 0%, #FF3333 100%)',
-              border: 'none',
-              color: '#fff',
-              fontWeight: 900,
-              fontSize: 14,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              boxShadow: '0 0 20px rgba(239,68,68,0.25)',
-            }}
+            className="flex-1 py-4 rounded-2xl bg-red-600 text-white font-black text-sm italic tracking-widest flex items-center justify-center hover:bg-red-700 active:scale-95 transition-all shadow-[0_10px_30px_rgba(239,68,68,0.3)]"
           >
-            종료
+            FINISH
           </button>
         </div>
       </div>
