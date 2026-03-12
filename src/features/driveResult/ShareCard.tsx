@@ -102,11 +102,20 @@ export function ShareCard({ result, routeName }: ShareCardProps) {
           borderRadius: 32,
           overflow: 'hidden',
           position: 'relative',
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: '#080808',
+          border: '1px solid rgba(255,255,255,0.1)',
+          background: '#040404',
           marginBottom: 32,
-          boxShadow: 'inset 0 0 40px rgba(0,0,0,0.4)',
+          boxShadow: '0 0 40px rgba(0,0,0,0.5)',
         }}>
+          {/* TRAJECTORY ANALYSIS 레이블 */}
+          <div style={{
+            position: 'absolute', top: 20, left: 24, zIndex: 10,
+            display: 'flex', alignItems: 'center', gap: 6
+          }}>
+            <div className="w-1.5 h-1.5 rounded-full bg-[#00FFFF] animate-pulse" />
+            <span style={{ fontSize: 10, fontWeight: 900, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em' }}>TRAJECTORY ANALYSIS</span>
+          </div>
+
           {staticMapUrl && (
              <img 
                src={staticMapUrl} 
@@ -114,11 +123,15 @@ export function ShareCard({ result, routeName }: ShareCardProps) {
                crossOrigin="anonymous"
                style={{ 
                  position: 'absolute', inset: 0, width: '100%', height: '100%', 
-                 objectFit: 'cover', opacity: 0.8, filter: 'grayscale(1) contrast(1.4) brightness(0.45)' 
+                 objectFit: 'cover', opacity: 1.0, filter: 'grayscale(1) contrast(1.2) brightness(0.7)' 
                }} 
              />
           )}
-          <div style={{ position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
+          
+          {/* 어두운 비네팅 오버레이 (궤적 강조용) */}
+          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.6) 100%)', zIndex: 1 }} />
+
+          <div style={{ position: 'relative', zIndex: 2, pointerEvents: 'none', height: '100%' }}>
             <TrajectoryCanvas telemetry={result.telemetry} width={800} height={1000} />
           </div>
           

@@ -81,84 +81,81 @@ export function TrajectoryCanvas({ telemetry, width = 800, height = 460 }: Traje
     ctx.lineJoin = 'round';
     ctx.stroke();
 
-    // ── 속도별 컬러 경로 ──
+    // ── 속도별 컬러 경로 (Neon Glow System) ──
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // 1단계: 주변부 광원 (Blurry Outer Glow)
     for (let i = 1; i < telemetry.length; i++) {
       const color = speedToColor(telemetry[i].speed);
-
-      // 세그먼트 메인 라인
       ctx.beginPath();
       ctx.moveTo(toX(telemetry[i - 1].lng), toY(telemetry[i - 1].lat));
       ctx.lineTo(toX(telemetry[i].lng), toY(telemetry[i].lat));
       ctx.strokeStyle = color;
-      ctx.lineWidth = 4;
-      ctx.lineCap = 'round';
+      ctx.lineWidth = 14;
+      ctx.globalAlpha = 0.15;
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = color;
       ctx.stroke();
     }
 
-    // ── km 마커 (매 20포인트마다 작은 도트) ──
-    ctx.fillStyle = 'rgba(255,255,255,0.12)';
-    for (let i = 20; i < telemetry.length; i += 20) {
-      const x = toX(telemetry[i].lng);
-      const y = toY(telemetry[i].lat);
+    // 2단계: 핵심 네온 라인 (Solid Inner Line)
+    ctx.globalAlpha = 1.0;
+    ctx.shadowBlur = 0;
+    for (let i = 1; i < telemetry.length; i++) {
+      const color = speedToColor(telemetry[i].speed);
       ctx.beginPath();
-      ctx.arc(x, y, 2, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.moveTo(toX(telemetry[i - 1].lng), toY(telemetry[i - 1].lat));
+      ctx.lineTo(toX(telemetry[i].lng), toY(telemetry[i].lat));
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 5;
+      ctx.stroke();
     }
+
+    // 3단계: 화이트 코어 (Highlight for extra punch)
+    ctx.globalAlpha = 0.4;
+    for (let i = 1; i < telemetry.length; i++) {
+      ctx.beginPath();
+      ctx.moveTo(toX(telemetry[i - 1].lng), toY(telemetry[i - 1].lat));
+      ctx.lineTo(toX(telemetry[i].lng), toY(telemetry[i].lat));
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1.0;
 
     // ── 시작점 (S) ──
     const sx = toX(telemetry[0].lng), sy = toY(telemetry[0].lat);
-    // Outer glow
-    ctx.beginPath();
-    ctx.arc(sx, sy, 14, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
-    ctx.fill();
-    // Ring
-    ctx.beginPath();
-    ctx.arc(sx, sy, 9, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
-    ctx.fill();
-    // Core
-    ctx.beginPath();
-    ctx.arc(sx, sy, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#10B981';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    // Label
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 7px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('S', sx, sy + 0.5);
+    drawMarker(ctx, sx, sy, '#10CC81', 'S');
 
     // ── 종료점 (E) ──
     const last = telemetry[telemetry.length - 1];
     const ex = toX(last.lng), ey = toY(last.lat);
-    // Outer glow
+    drawMarker(ctx, ex, ey, '#FF3333', 'E');
+  }
+
+  function drawMarker(ctx: CanvasRenderingContext2D, x: number, y: number, color: number | string, label: string) {
+    // Glow
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = String(color);
     ctx.beginPath();
-    ctx.arc(ex, ey, 14, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(239, 68, 68, 0.12)';
+    ctx.arc(x, y, 12, 0, Math.PI * 2);
+    ctx.fillStyle = String(color);
     ctx.fill();
-    // Ring
-    ctx.beginPath();
-    ctx.arc(ex, ey, 9, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
-    ctx.fill();
+    
     // Core
+    ctx.shadowBlur = 0;
     ctx.beginPath();
-    ctx.arc(ex, ey, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#EF4444';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    // Label
+    ctx.arc(x, y, 8, 0, Math.PI * 2);
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 7px sans-serif';
+    ctx.fill();
+    
+    // Label
+    ctx.fillStyle = '#000';
+    ctx.font = 'black 10px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('E', ex, ey + 0.5);
+    ctx.fillText(label, x, y + 0.5);
   }
 
   return (
