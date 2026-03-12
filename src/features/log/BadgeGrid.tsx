@@ -38,7 +38,7 @@ export function BadgeGrid() {
               )}
               
               <div className={`relative z-10 w-12 h-12 flex items-center justify-center text-3xl mb-3 rounded-full ${isUnlocked ? 'bg-primary/10 text-glow shadow-[0_0_15px_rgba(255,90,0,0.3)]' : 'bg-white/5'}`}>
-                {badge.icon}
+                {badge.emoji}
                 {isUnlocked && <Sparkles className="absolute -top-1 -right-1 text-warning w-3 h-3 animate-pulse" />}
               </div>
               

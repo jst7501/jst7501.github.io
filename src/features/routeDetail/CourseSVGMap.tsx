@@ -9,7 +9,7 @@ export function CourseSVGMap({ nodes }: CourseSVGMapProps) {
   if (nodes.length < 2) return null;
 
   // Map Coordinates onto 0-100% SVG Box
-  const xCoords = nodes.map(n => n.lon);
+  const xCoords = nodes.map(n => n.lng);
   const yCoords = nodes.map(n => n.lat);
   
   const minX = Math.min(...xCoords);
@@ -21,7 +21,7 @@ export function CourseSVGMap({ nodes }: CourseSVGMapProps) {
   const rangeY = maxY - minY || 1;
 
   const points = nodes.map(n => ({
-    x: ((n.lon - minX) / rangeX) * 100,
+    x: ((n.lng - minX) / rangeX) * 100,
     // Invert Y because SVG coordinates go down, GPS goes up
     y: (1 - ((n.lat - minY) / rangeY)) * 100,
     type: n.type
