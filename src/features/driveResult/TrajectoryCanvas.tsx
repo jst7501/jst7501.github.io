@@ -45,25 +45,6 @@ export function TrajectoryCanvas({ telemetry, width = 800, height = 460 }: Traje
     const h = height;
     ctx.clearRect(0, 0, w, h);
 
-    // ── 배경: 깊은 다크 지형 ──
-    const bgGrad = ctx.createRadialGradient(w * 0.35, h * 0.3, 0, w * 0.5, h * 0.5, w * 0.9);
-    bgGrad.addColorStop(0, '#151d28');
-    bgGrad.addColorStop(0.3, '#111a24');
-    bgGrad.addColorStop(0.6, '#0d141c');
-    bgGrad.addColorStop(1, '#080c12');
-    ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, w, h);
-
-    // ── 미세 그리드 (topographic 느낌) ──
-    ctx.strokeStyle = 'rgba(255,255,255,0.018)';
-    ctx.lineWidth = 0.5;
-    for (let x = 0; x < w; x += 24) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-    }
-    for (let y = 0; y < h; y += 24) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
-
     // ── 좌표 계산 ──
     let minLat = Infinity, maxLat = -Infinity;
     let minLng = Infinity, maxLng = -Infinity;
@@ -88,42 +69,23 @@ export function TrajectoryCanvas({ telemetry, width = 800, height = 460 }: Traje
     const toX = (lng: number) => offsetX + (lng - minLng) * scale;
     const toY = (lat: number) => h - (offsetY + (lat - minLat) * scale);
 
-    // ── 외곽 광역 글로우 (분위기) ──
+    // ── 외곽 기본 경로 (어두운 가이드라인) ──
     ctx.beginPath();
     ctx.moveTo(toX(telemetry[0].lng), toY(telemetry[0].lat));
     for (let i = 1; i < telemetry.length; i++) {
       ctx.lineTo(toX(telemetry[i].lng), toY(telemetry[i].lat));
     }
-    ctx.strokeStyle = 'rgba(255, 90, 0, 0.04)';
-    ctx.lineWidth = 28;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 6;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.stroke();
 
-    // ── 중간 글로우 ──
-    ctx.beginPath();
-    ctx.moveTo(toX(telemetry[0].lng), toY(telemetry[0].lat));
-    for (let i = 1; i < telemetry.length; i++) {
-      ctx.lineTo(toX(telemetry[i].lng), toY(telemetry[i].lat));
-    }
-    ctx.strokeStyle = 'rgba(255, 120, 0, 0.08)';
-    ctx.lineWidth = 14;
-    ctx.stroke();
-
-    // ── 속도별 네온 세그먼트 (2-pass: 글로우 + 메인) ──
+    // ── 속도별 컬러 경로 ──
     for (let i = 1; i < telemetry.length; i++) {
       const color = speedToColor(telemetry[i].speed);
 
-      // 세그먼트 글로우
-      ctx.beginPath();
-      ctx.moveTo(toX(telemetry[i - 1].lng), toY(telemetry[i - 1].lat));
-      ctx.lineTo(toX(telemetry[i].lng), toY(telemetry[i].lat));
-      ctx.strokeStyle = color + '40';
-      ctx.lineWidth = 10;
-      ctx.lineCap = 'round';
-      ctx.stroke();
-
-      // 메인 라인
+      // 세그먼트 메인 라인
       ctx.beginPath();
       ctx.moveTo(toX(telemetry[i - 1].lng), toY(telemetry[i - 1].lat));
       ctx.lineTo(toX(telemetry[i].lng), toY(telemetry[i].lat));

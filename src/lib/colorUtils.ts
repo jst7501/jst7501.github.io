@@ -1,27 +1,20 @@
-/**
- * 속도 → 색상 매핑 유틸리티
- * 초록(저속) → 노란색(중속) → 빨간색(고속)
- */
 export function speedToColor(speedMs: number): string {
   const kmh = speedMs * 3.6;
   
-  if (kmh <= 30) return '#10B981';     // 초록 — 저속
-  if (kmh <= 60) {
-    // 초록 → 노랑 보간
-    const t = (kmh - 30) / 30;
-    return lerpColor('#10B981', '#F59E0B', t);
+  if (kmh <= 20) return '#00FFFF'; // 사이안 — 극저속
+  if (kmh <= 50) {
+    const t = (kmh - 20) / 30;
+    return lerpColor('#00FFFF', '#10B981', t); // 사이안 → 초록
   }
-  if (kmh <= 100) {
-    // 노랑 → 주황 보간
-    const t = (kmh - 60) / 40;
-    return lerpColor('#F59E0B', '#FF5A00', t);
+  if (kmh <= 80) {
+    const t = (kmh - 50) / 30;
+    return lerpColor('#10B981', '#F59E0B', t); // 초록 → 노랑/주황
   }
-  if (kmh <= 140) {
-    // 주황 → 빨강 보간
-    const t = (kmh - 100) / 40;
-    return lerpColor('#FF5A00', '#EF4444', t);
+  if (kmh <= 120) {
+    const t = (kmh - 80) / 40;
+    return lerpColor('#F59E0B', '#EF4444', t); // 주황 → 빨강
   }
-  return '#EF4444'; // 빨강 — 고속
+  return '#FF00FF'; // 마젠타 — 초고속
 }
 
 /**

@@ -198,13 +198,12 @@ export function DriveStartOverlay({ onComplete }: DriveStartOverlayProps) {
         />
       )}
 
-      {/* 안내 텍스트 (3일 때만) */}
+      {/* 안내 텍스트 (카운트다운 내내 유지) */}
       <div
-        className="absolute bottom-32 text-center px-8"
+        className="absolute bottom-32 text-center px-8 transition-all duration-500"
         style={{
-          opacity: phase === 'count' && count === 3 ? 1 : 0,
-          transform: phase === 'count' && count === 3 ? 'translateY(0)' : 'translateY(10px)',
-          transition: 'opacity 0.3s, transform 0.3s',
+          opacity: 1,
+          transform: 'translateY(0)',
         }}
       >
         <p style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>

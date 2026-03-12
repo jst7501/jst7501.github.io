@@ -2,9 +2,9 @@ import React, { useRef, useCallback, useMemo } from 'react';
 import { DriveSessionResult } from '../../store/driveStore';
 import { analyzePersona } from '../../lib/personaEngine';
 import { TrajectoryCanvas } from './TrajectoryCanvas';
-import { TelemetryChart } from './TelemetryChart';
-import { Download, MapPin, Gauge, Zap, Activity } from 'lucide-react';
+import { Download, Timer, Activity, Zap, Compass } from 'lucide-react';
 import { getStaticMapUrl } from '../../lib/staticMap';
+import { deriveAdvancedMetrics } from '../../lib/metrics';
 
 interface ShareCardProps {
   result: DriveSessionResult;
@@ -12,22 +12,19 @@ interface ShareCardProps {
 }
 
 /**
- * 하이퍼-글래스모피즘 기반 프리미엄 공유 카드
- * - Naver Static Map 정적 이미지 배경 (캡처 안정성 확보)
- * - 3D 궤적 캔버스 오버레이
- * - 투명도와 블러가 강조된 스탯 그리드
+ * 인스타 최적화 프로 레이서 공유 카드
  */
 export function ShareCard({ result, routeName }: ShareCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const persona = analyzePersona(result);
+  const metrics = useMemo(() => deriveAdvancedMetrics(result), [result]);
 
-  const staticMapUrl = useMemo(() => getStaticMapUrl(result.telemetry, 600, 400), [result]);
+  const staticMapUrl = useMemo(() => getStaticMapUrl(result.telemetry, 800, 1000), [result]);
 
   const maxSpeedKmh = Math.round(result.maxSpeed * 3.6);
-  const avgSpeedKmh = Math.round(result.avgSpeed * 3.6);
   const durationMin = Math.floor(result.durationMs / 60000);
   const durationSec = Math.floor((result.durationMs % 60000) / 1000);
-  const durationStr = `${durationMin > 0 ? `${durationMin}m ` : ''}${durationSec.toString().padStart(2, '0')}s`;
+  const durationStr = `${durationMin > 0 ? `${durationMin}m ` : ''}${durationSec}s`;
   
   const date = new Date(result.startTime);
   const dateStr = `${date.getFullYear()}. ${(date.getMonth() + 1).toString().padStart(2, '0')}. ${date.getDate().toString().padStart(2, '0')}`;
@@ -44,14 +41,14 @@ export function ShareCard({ result, routeName }: ShareCardProps) {
       const mod = await import('html2canvas');
       const html2canvas = mod.default;
       const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: '#050505',
+        backgroundColor: '#010101',
         scale: 3,
         logging: false,
         useCORS: true,
         allowTaint: true,
       });
       const link = document.createElement('a');
-      link.download = `winding_share_${date.getTime()}.png`;
+      link.download = `winding_pro_${date.getTime()}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (e) {
@@ -61,172 +58,141 @@ export function ShareCard({ result, routeName }: ShareCardProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* ── 캡처 카드 본체 ── */}
+      {/* ── 캡처 카드 본체: 인스타 최적화 4:5 비율 ── */}
       <div
         ref={cardRef}
         style={{
-          background: '#050505',
-          borderRadius: 32,
+          background: '#010101',
+          width: '100%',
+          aspectRatio: '4/5',
+          borderRadius: 48,
           overflow: 'hidden',
-          padding: '40px 28px 32px',
           position: 'relative',
+          padding: '48px 36px',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 30px 80px rgba(0,0,0,1)',
         }}
       >
-        {/* 장식용 그라데이션 광원 (글래스 효과 극대화) */}
-        <div style={{ position: 'absolute', top: -100, left: -60, width: 240, height: 240, background: persona.color, opacity: 0.1, filter: 'blur(80px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -50, right: -40, width: 180, height: 180, background: '#8B5CF6', opacity: 0.08, filter: 'blur(60px)', pointerEvents: 'none' }} />
+        {/* 장식용 광원 */}
+        <div style={{ position: 'absolute', top: -100, right: -50, width: 350, height: 350, background: persona.color, opacity: 0.12, filter: 'blur(100px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -50, left: -40, width: 250, height: 250, background: '#00FFFF', opacity: 0.08, filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-        {/* ── 헤더 ── */}
-        <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative', zIndex: 10 }}>
-          <h1 style={{
-            fontSize: 32, fontWeight: 900, color: '#ffffff', margin: 0,
-            letterSpacing: '-0.03em', lineHeight: 1.1,
-          }}>
-            {dateStr}
-          </h1>
-          <p style={{
-            fontSize: 16, fontWeight: 700, color: 'rgba(255,255,255,0.4)',
-            margin: '8px 0 0',
-          }}>
-            {routeName || 'FREE DRIVE SESSION'}
-          </p>
+        {/* ── 상단 정보 ── */}
+        <div style={{ position: 'relative', zIndex: 10, marginBottom: 40 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h1 style={{ fontSize: 40, fontWeight: 950, color: '#fff', letterSpacing: '-0.04em', lineHeight: 1, margin: 0 }}>
+                {dateStr}
+              </h1>
+              <p style={{ fontSize: 14, fontWeight: 800, color: 'rgba(255,255,255,0.25)', marginTop: 8, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                {routeName || 'Free Drive Log'}
+              </p>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: 12, fontWeight: 900, color: '#FF5A00', letterSpacing: '0.2em' }}>TELEMETRY V2.4</div>
+              <div style={{ fontSize: 12, fontWeight: 900, color: 'rgba(255,255,255,0.1)', marginTop: 2 }}>RACING ENGINE</div>
+            </div>
+          </div>
         </div>
 
-        {/* ── 메인 시각화: 정적 지도 + 캔버스 트레일 ── */}
+        {/* ── 메인 맵 섹션 ── */}
         <div style={{
-          borderRadius: 28,
+          flex: 1,
+          borderRadius: 32,
           overflow: 'hidden',
-          marginBottom: 20,
           position: 'relative',
           border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
-          aspectRatio: '1.5/1',
-          background: '#111318',
+          background: '#080808',
+          marginBottom: 32,
+          boxShadow: 'inset 0 0 40px rgba(0,0,0,0.4)',
         }}>
-          {/* 네이버 정적 지도 (배경) */}
           {staticMapUrl && (
              <img 
                src={staticMapUrl} 
-               alt="Drive Course Map"
+               alt="Course Map"
                crossOrigin="anonymous"
                style={{ 
                  position: 'absolute', inset: 0, width: '100%', height: '100%', 
-                 objectFit: 'cover', opacity: 0.7, filter: 'grayscale(1) contrast(1.2) brightness(0.6)' 
+                 objectFit: 'cover', opacity: 0.8, filter: 'grayscale(1) contrast(1.4) brightness(0.45)' 
                }} 
              />
           )}
-          
-          {/* 캔버스 오버레이 (실제 트레일의 선명함 유지) */}
           <div style={{ position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
-            <TrajectoryCanvas
-              telemetry={result.telemetry}
-              width={800}
-              height={533}
-            />
+            <TrajectoryCanvas telemetry={result.telemetry} width={800} height={1000} />
           </div>
-
-          {/* WINDING MODE 라벨 */}
+          
+          {/* 하단 플로팅 스탯 */}
           <div style={{
-            position: 'absolute', top: 16, right: 16,
-            background: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            padding: '6px 12px',
-            borderRadius: 10,
-            border: '1px solid rgba(255,90,0,0.4)',
-            zIndex: 10,
+            position: 'absolute', bottom: 20, left: 20, right: 20,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+            zIndex: 10
           }}>
-            <span style={{ fontSize: 10, fontWeight: 900, color: '#FF5A00', letterSpacing: '0.15em' }}>
-              WINDING MODE
-            </span>
+            <div style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(16px)', padding: '10px 18px', borderRadius: 16, border: '1px solid rgba(255,255,255,0.12)' }}>
+               <div style={{ fontSize: 9, fontWeight: 900, color: 'rgba(255,255,255,0.4)', marginBottom: 2, letterSpacing: '0.05em' }}>MAX VELOCITY</div>
+               <div style={{ fontSize: 28, fontStyle: 'italic', fontWeight: 1000, color: '#fff' }}>{maxSpeedKmh}<span style={{ fontSize: 14, marginLeft: 2, opacity: 0.4 }}>km/h</span></div>
+            </div>
+            <div style={{ textAlign: 'right', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(16px)', padding: '10px 18px', borderRadius: 16, border: '1px solid rgba(255,90,0,0.25)' }}>
+               <div style={{ fontSize: 9, fontWeight: 900, color: '#FF9D00', marginBottom: 2, letterSpacing: '0.05em' }}>PEAK LATERAL G</div>
+               <div style={{ fontSize: 28, fontStyle: 'italic', fontWeight: 1000, color: '#fff' }}>{result.maxLateralG.toFixed(2)}<span style={{ fontSize: 14, marginLeft: 2, opacity: 0.4 }}>G</span></div>
+            </div>
           </div>
         </div>
 
-        {/* ── 2x2 프리미엄 글래스 스탯 ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-          <PremiumStat icon={<MapPin size={12} />} label="DISTANCE" value={`${totalDistKm}`} unit="km" />
-          <PremiumStat icon={<Zap size={12} />} label="AVG SPEED" value={`${avgSpeedKmh}`} unit="km/h" />
-          <PremiumStat icon={<Gauge size={12} />} label="TOP SPEED" value={`${maxSpeedKmh}`} unit="km/h" />
-          <PremiumStat icon={<Activity size={12} />} label="MAX G" value={result.maxLateralG.toFixed(2)} unit="G" />
+        {/* ── 프로 분석 데이터 그리드 ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
+          <MiniMetric icon={<Timer size={14} />} label="TIME" value={durationStr} />
+          <MiniMetric icon={<Activity size={14} />} label="CORNERS" value={`${metrics.cornerCount}`} />
+          <MiniMetric icon={<Zap size={14} />} label="SMOOTH" value={`${metrics.smoothnessScore}%`} />
+          <MiniMetric icon={<Compass size={14} />} label="DIST" value={`${totalDistKm}km`} />
         </div>
 
-        {/* ── 페르소나 텍스트 ── */}
-        <div style={{
-          textAlign: 'center',
-          padding: '24px 0 16px',
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-          marginTop: 8,
-        }}>
-           <div style={{ fontSize: 56, marginBottom: 8, filter: `drop-shadow(0 0 20px ${persona.color}40)` }}>{persona.emoji}</div>
-           <h2 style={{
-             fontSize: 24, fontWeight: 900, color: '#fff', margin: 0,
-             textShadow: `0 0 24px ${persona.color}30`,
-           }}>
-             {persona.title}
-           </h2>
-           <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.3)', marginTop: 4, letterSpacing: '0.05em' }}>
-             {persona.description.toUpperCase()}
-           </p>
+        {/* ── 페르소나 배너 ── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24, background: 'rgba(255,255,255,0.03)', borderRadius: 28, padding: '24px 28px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ fontSize: 52, filter: `drop-shadow(0 0 15px ${persona.color}40)` }}>{persona.emoji}</div>
+          <div style={{ flex: 1 }}>
+            <h2 style={{ fontSize: 20, fontWeight: 1000, color: '#fff', margin: 0, letterSpacing: '-0.02em' }}>{persona.title.toUpperCase()}</h2>
+            <p style={{ fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.3)', marginTop: 3, letterSpacing: '0.05em' }}>{persona.description.toUpperCase()}</p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: 16, fontWeight: 1000, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 1 }}>
+               <span style={{ color: '#FF5A00' }}>{Math.floor(metrics.intensityScore)}</span>
+               <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)' }}>PTS</span>
+            </div>
+            <div style={{ fontSize: 9, fontWeight: 900, color: 'rgba(255,255,255,0.15)', marginTop: 2, letterSpacing: '0.1em' }}>SCORE</div>
+          </div>
         </div>
 
-        {/* ── 브랜딩 ── */}
-        <div style={{ textAlign: 'center', marginTop: 12 }}>
-          <p style={{ fontSize: 16, fontWeight: 950, margin: 0, letterSpacing: '-0.02em' }}>
-            <span style={{ color: '#FF5A00' }}>🏁 WINDING</span>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}> NAVI</span>
-          </p>
-          <p style={{
-            fontSize: 8, fontWeight: 800,
-            color: 'rgba(255,255,255,0.15)',
-            letterSpacing: '0.3em', marginTop: 4,
-          }}>
-            PREMIUM DRIVING ENGINE
-          </p>
+        {/* ── 푸터 로고 ── */}
+        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 28, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ width: 24, height: 24, background: '#FF5A00', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 1000, color: '#000' }}>W</span>
+            <span style={{ color: '#fff', fontWeight: 1000, fontSize: 18, letterSpacing: '-0.04em' }}>WINDING NAVI <span style={{ opacity: 0.3, fontWeight: 800 }}>PRO</span></span>
+          </div>
+          <div style={{ fontSize: 10, fontWeight: 900, color: 'rgba(255,255,255,0.15)', letterSpacing: '0.15em' }}>WND.N_LOG_E v2.4</div>
         </div>
       </div>
 
-      {/* ── 카드 외부 버튼 ── */}
+      {/* ── 이미지 저장 버튼 ── */}
       <button
         onClick={handleDownload}
-        className="w-full py-5 rounded-[24px] bg-gradient-to-r from-[#FF5A00] to-[#FFCC00] text-white font-black text-lg flex items-center justify-center gap-3 shadow-[0_12px_40px_rgba(255,90,0,0.4)] animate-press active:scale-95 transition-all"
+        className="w-full h-16 rounded-[24px] bg-white text-black font-black text-lg flex items-center justify-center gap-3 shadow-[0_25px_50px_rgba(255,255,255,0.1)] hover:scale-[1.02] active:scale-95 transition-all"
       >
-        <Download size={22} strokeWidth={3} /> 카드 저장하기
+        <Download size={22} strokeWidth={3} /> EXPORT SHARE CARD
       </button>
     </div>
   );
 }
 
-/** 프리미엄 스탯 */
-function PremiumStat({ icon, label, value, unit }: { icon: any; label: string; value: string; unit: string }) {
+/** 미니 메트릭 컴포넌트 */
+function MiniMetric({ icon, label, value }: { icon: any, label: string, value: string }) {
   return (
-    <div style={{
-      background: 'rgba(255,255,255,0.04)',
-      backdropFilter: 'blur(20px)',
-      WebkitBackdropFilter: 'blur(20px)',
-      borderRadius: 20,
-      padding: '18px 20px',
-      border: '1px solid rgba(255,255,255,0.08)',
-      boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         <span style={{ color: '#FF5A00', opacity: 0.8 }}>{icon}</span>
-        <span style={{ fontSize: 10, fontWeight: 850, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em' }}>
-          {label}
-        </span>
+        <span style={{ fontSize: 9, fontWeight: 1000, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.1em' }}>{label}</span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-        <span style={{
-          fontSize: 34, fontWeight: 900, color: '#ffffff', lineHeight: 1,
-          fontVariantNumeric: 'tabular-nums',
-        }}>
-          {value}
-        </span>
-        {unit && (
-          <span style={{ fontSize: 14, fontWeight: 800, color: 'rgba(255,255,255,0.2)' }}>
-            {unit}
-          </span>
-        )}
-      </div>
+      <div style={{ fontSize: 18, fontWeight: 1000, color: '#fff', letterSpacing: '-0.02em' }}>{value}</div>
     </div>
   );
 }
