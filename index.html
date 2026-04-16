@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주리인(JURIN) 매매 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <script>
+        // 구 도메인의 인덱스 페이지나 특정 스크립트에 삽입
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    // FCM 서비스 워커를 포함한 모든 워커 해제
+                    registration.unregister();
+                    console.log('Old Service Worker Unregistered');
+                }
+            });
+        }
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        toss: {
+                            blue: '#3182f6',
+                            red: '#f04452',
+                            gray: {
+                                50: '#f9fafb',
+                                100: '#f2f4f6',
+                                200: '#e5e8eb',
+                                300: '#d1d6db',
+                                400: '#b0b8c1',
+                                500: '#8b95a1',
+                                600: '#6b7684',
+                                700: '#4e5968',
+                                800: '#333d4b',
+                                900: '#191f28'
+                            }
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f2f4f6; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .card-shadow { box-shadow: 0 8px 30px rgba(0,0,0,0.04); }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+        .float { animation: float 3s ease-in-out infinite; }
+    </style>
+</head>
+<body class="font-sans text-toss-gray-800">
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+        const { motion, AnimatePresence } = Motion;
+
+        const DashData = {"summary": {"total_profit": 188345, "total_trades": 141, "wins": 68, "losses": 73, "updated_at": "2026-04-10 16:01:18"}, "best_trade": {"stock_name": "보원케미칼", "stock_code": "Unknown", "strategy": "ACTIVE_SCALP", "profit_rate": 4.42, "profit_amount": 203840, "holding_minutes": 2, "sell_time": "2026-04-07 13:28:10", "sell_reason": "+2.5% 달성 (4.42%)", "result": "W", "date": "2026-04-07"}, "worst_trade": {"stock_name": "창해에탄올", "stock_code": "Unknown", "strategy": "Unknown", "profit_rate": -3.74, "profit_amount": -150500, "holding_minutes": 7, "sell_time": "2026-04-07 13:38:34", "sell_reason": "-3.0% 타격 (-3.74%)", "result": "L", "date": "2026-04-07"}, "strategies": [{"name": "ACTIVE_SCALP", "total_trades": 79, "win_rate": 50.63291139240506, "total_profit": 285569, "avg_yield": 0.09064866895139317}, {"name": "PANIC_BUY", "total_trades": 16, "win_rate": 50.0, "total_profit": 98679, "avg_yield": 0.30852132452933134}, {"name": "CLOSING_BET", "total_trades": 1, "win_rate": 100.0, "total_profit": 81985, "avg_yield": 4.1}, {"name": "MORNING_GAP_A", "total_trades": 1, "win_rate": 100.0, "total_profit": 9735, "avg_yield": 0.49}, {"name": "MORNING_GAP_B", "total_trades": 2, "win_rate": 50.0, "total_profit": -44005, "avg_yield": -1.099641148325359}, {"name": "Unknown", "total_trades": 13, "win_rate": 38.46153846153847, "total_profit": -122090, "avg_yield": -0.1835687585332508}, {"name": "VWAP_BOUNCE", "total_trades": 29, "win_rate": 41.37931034482759, "total_profit": -127438, "avg_yield": -0.21867154302775543}], "chart_data": [{"date": "2026-04-07", "profit": 51980, "cumulative": 51980}, {"date": "2026-04-08", "profit": 96745, "cumulative": 148725}, {"date": "2026-04-10", "profit": 39620, "cumulative": 188345}], "recent_trades": [{"stock_name": "우리로", "stock_code": null, "strategy": "PANIC_BUY", "profit_rate": -2.0253164556962027, "profit_amount": -40480, "holding_minutes": 14, "sell_time": "2026-04-10 14:43:40", "sell_reason": "💧 [손절컷] -2.0% 타격 (-2.03%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "흥아해운", "stock_code": "003280", "strategy": "ACTIVE_SCALP", "profit_rate": 0.4484304932735426, "profit_amount": 8955, "holding_minutes": 16, "sell_time": "2026-04-10 14:32:33", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.45%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "팬오션", "stock_code": "028670", "strategy": "ACTIVE_SCALP", "profit_rate": 0.46904315196998125, "profit_amount": 9375, "holding_minutes": 11, "sell_time": "2026-04-10 14:28:09", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.47%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "보원케미칼", "stock_code": null, "strategy": "PANIC_BUY", "profit_rate": -1.3745704467353952, "profit_amount": -27480, "holding_minutes": 15, "sell_time": "2026-04-10 14:21:33", "sell_reason": "⏰ [타임컷] 15분 경과 (수익률 -1.37%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "한국첨단소재", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -1.8159806295399514, "profit_amount": -36300, "holding_minutes": 1, "sell_time": "2026-04-10 14:18:22", "sell_reason": "💧 [손절컷] -1.5% 타격 (-1.82%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "동방", "stock_code": "004140", "strategy": "ACTIVE_SCALP", "profit_rate": 0.3424657534246575, "profit_amount": 6840, "holding_minutes": 49, "sell_time": "2026-04-10 14:14:26", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.34%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "한국첨단소재", "stock_code": "062970", "strategy": "ACTIVE_SCALP", "profit_rate": 0.3588516746411483, "profit_amount": 7170, "holding_minutes": 5, "sell_time": "2026-04-10 14:06:31", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.36%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "보원케미칼", "stock_code": "0010F0", "strategy": "PANIC_BUY", "profit_rate": 0.3444316877152698, "profit_amount": 6870, "holding_minutes": 15, "sell_time": "2026-04-10 13:56:47", "sell_reason": "⏰ [타임컷] 15분 경과 (수익률 0.34%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "머큐리", "stock_code": "100590", "strategy": "ACTIVE_SCALP", "profit_rate": 5.845511482254697, "profit_amount": 116480, "holding_minutes": 9, "sell_time": "2026-04-10 13:41:00", "sell_reason": "🎯 [목표익절] +2.5% 달성 (5.85%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "머큐리", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.7216494845360825, "profit_amount": -14420, "holding_minutes": 5, "sell_time": "2026-04-10 13:26:02", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.72%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "디이엔티", "stock_code": "079810", "strategy": "ACTIVE_SCALP", "profit_rate": 0.1631321370309951, "profit_amount": 3260, "holding_minutes": 5, "sell_time": "2026-04-10 13:23:37", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.16%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "아이즈비전", "stock_code": null, "strategy": "PANIC_BUY", "profit_rate": 0.0, "profit_amount": 0, "holding_minutes": 15, "sell_time": "2026-04-10 13:07:19", "sell_reason": "⏰ [타임컷] 15분 경과 (수익률 0.00%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "수산세보틱스", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": 0.0, "profit_amount": 0, "holding_minutes": 5, "sell_time": "2026-04-10 12:50:11", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.00%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "부국철강", "stock_code": "026940", "strategy": "ACTIVE_SCALP", "profit_rate": 0.3795066413662239, "profit_amount": 7590, "holding_minutes": 5, "sell_time": "2026-04-10 12:41:26", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.38%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "금강철강", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.322061191626409, "profit_amount": -6440, "holding_minutes": 5, "sell_time": "2026-04-10 12:36:09", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.32%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "CS", "stock_code": "065770", "strategy": "ACTIVE_SCALP", "profit_rate": 2.697495183044316, "profit_amount": 53900, "holding_minutes": 23, "sell_time": "2026-04-10 12:28:00", "sell_reason": "🎯 [목표익절] +2.5% 달성 (2.70%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "부국철강", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": 0.0, "profit_amount": 0, "holding_minutes": 5, "sell_time": "2026-04-10 12:27:01", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.00%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "파워넷", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.45871559633027525, "profit_amount": -9150, "holding_minutes": 5, "sell_time": "2026-04-10 12:06:11", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.46%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "에이치엠넥스", "stock_code": null, "strategy": "Unknown", "profit_rate": -0.7905138339920948, "profit_amount": -15840, "holding_minutes": 25, "sell_time": "2026-04-10 11:53:00", "sell_reason": "⏰ [타임컷] 25분 경과 (수익률 -0.79%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "라이콤", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.17482517482517482, "profit_amount": -3490, "holding_minutes": 5, "sell_time": "2026-04-10 11:49:02", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.17%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "기가레인", "stock_code": "049080", "strategy": "ACTIVE_SCALP", "profit_rate": 0.1984126984126984, "profit_amount": 3965, "holding_minutes": 5, "sell_time": "2026-04-10 11:41:38", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.20%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "한온시스템", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.12674271229404308, "profit_amount": -2530, "holding_minutes": 5, "sell_time": "2026-04-10 11:29:00", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.13%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "한국첨단소재", "stock_code": "062970", "strategy": "ACTIVE_SCALP", "profit_rate": 0.3592814371257485, "profit_amount": 5280, "holding_minutes": 8, "sell_time": "2026-04-10 11:25:19", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.36%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "에코플라스틱", "stock_code": "038110", "strategy": "VWAP_BOUNCE", "profit_rate": 0.26666666666666666, "profit_amount": 5330, "holding_minutes": 31, "sell_time": "2026-04-10 11:21:06", "sell_reason": "⏰ [타임컷] 25분 경과 (수익률 0.27%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "한온시스템", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.12658227848101267, "profit_amount": -2530, "holding_minutes": 5, "sell_time": "2026-04-10 11:21:05", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.13%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "한국첨단소재", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.9389671361502347, "profit_amount": -18320, "holding_minutes": 5, "sell_time": "2026-04-10 11:12:31", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.94%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "한온시스템", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.7556675062972292, "profit_amount": -11610, "holding_minutes": 5, "sell_time": "2026-04-10 11:08:01", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.76%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "파워넷", "stock_code": null, "strategy": "VWAP_BOUNCE", "profit_rate": -1.906158357771261, "profit_amount": -38090, "holding_minutes": 25, "sell_time": "2026-04-10 11:06:07", "sell_reason": "⏰ [타임컷] 25분 경과 (수익률 -1.91%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "에코플라스틱", "stock_code": null, "strategy": "VWAP_BOUNCE", "profit_rate": -0.13315579227696406, "profit_amount": -2660, "holding_minutes": 25, "sell_time": "2026-04-10 10:47:19", "sell_reason": "⏰ [타임컷] 25분 경과 (수익률 -0.13%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "흥아해운", "stock_code": "003280", "strategy": "VWAP_BOUNCE", "profit_rate": 0.1579778830963665, "profit_amount": 3155, "holding_minutes": 25, "sell_time": "2026-04-10 10:38:25", "sell_reason": "⏰ [타임컷] 25분 경과 (수익률 0.16%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "에이치엠넥스", "stock_code": null, "strategy": "Unknown", "profit_rate": -1.160541586073501, "profit_amount": -23160, "holding_minutes": 25, "sell_time": "2026-04-10 10:22:07", "sell_reason": "⏰ [타임컷] 25분 경과 (수익률 -1.16%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "디이엔티", "stock_code": "079810", "strategy": "Unknown", "profit_rate": 4.8147922620729195, "profit_amount": 96080, "holding_minutes": 15, "sell_time": "2026-04-10 10:08:50", "sell_reason": "🎯 [목표익절] +4.5% 달성 (4.81%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "저스템", "stock_code": null, "strategy": "Unknown", "profit_rate": -0.31013070293958594, "profit_amount": -6179, "holding_minutes": 25, "sell_time": "2026-04-10 09:54:43", "sell_reason": "⏰ [타임컷] 25분 경과 (수익률 -0.31%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "대주산업", "stock_code": null, "strategy": "VWAP_BOUNCE", "profit_rate": -3.025830258302583, "profit_amount": -60516, "holding_minutes": 16, "sell_time": "2026-04-10 09:52:52", "sell_reason": "💧 [손절컷] -3.0% 타격 (-3.03%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "신성이엔지", "stock_code": "011930", "strategy": "VWAP_BOUNCE", "profit_rate": 4.579025110782865, "profit_amount": 91450, "holding_minutes": 5, "sell_time": "2026-04-10 09:35:54", "sell_reason": "🎯 [목표익절] +4.5% 달성 (4.58%)", "result": "W", "date": "2026-04-10"}, {"stock_name": "이노인스트루먼트", "stock_code": null, "strategy": "MORNING_GAP_B", "profit_rate": -3.349282296650718, "profit_amount": -66885, "holding_minutes": 0, "sell_time": "2026-04-10 09:15:27", "sell_reason": "💧 [손절컷] -3.0% 타격 (-3.35%)", "result": "L", "date": "2026-04-10"}, {"stock_name": "피노", "stock_code": null, "strategy": "ACTIVE_SCALP", "profit_rate": -0.5081300813008129, "profit_amount": -10250, "holding_minutes": 8, "sell_time": "2026-04-08 13:32:45", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.51%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "피노", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": -0.10162601626016261, "profit_amount": -2030, "holding_minutes": 5, "sell_time": "2026-04-08 13:29:17", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.10%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "삼성E&A", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": 0.0, "profit_amount": 0, "holding_minutes": 5, "sell_time": "2026-04-08 13:27:22", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.00%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "보원케미칼", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": -0.19474196689386564, "profit_amount": -3880, "holding_minutes": 5, "sell_time": "2026-04-08 13:27:19", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.19%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "휴림로봇", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": 0.176522506619594, "profit_amount": 3520, "holding_minutes": 5, "sell_time": "2026-04-08 13:05:48", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.18%)", "result": "W", "date": "2026-04-08"}, {"stock_name": "쏘닉스", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": 0.0, "profit_amount": 0, "holding_minutes": 5, "sell_time": "2026-04-08 13:02:34", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.00%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "쏘닉스", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": -1.5432098765432098, "profit_amount": -30825, "holding_minutes": 4, "sell_time": "2026-04-08 12:37:50", "sell_reason": "💧 [손절컷] -1.5% 타격 (-1.54%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "대한광통신", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": -0.18953752843062927, "profit_amount": -3775, "holding_minutes": 5, "sell_time": "2026-04-08 12:35:51", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 -0.19%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "CS", "stock_code": "000000", "strategy": "ACTIVE_SCALP", "profit_rate": 0.11102886750555144, "profit_amount": 2220, "holding_minutes": 9, "sell_time": "2026-04-08 12:09:18", "sell_reason": "⏰ [타임컷] 5분 경과 (수익률 0.11%)", "result": "W", "date": "2026-04-08"}, {"stock_name": "캡스톤파트너스", "stock_code": "000000", "strategy": "PANIC_BUY", "profit_rate": -0.8982035928143712, "profit_amount": -17955, "holding_minutes": 15, "sell_time": "2026-04-08 11:58:57", "sell_reason": "⏰ [타임컷] 15분 경과 (수익률 -0.90%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "캡스톤파트너스", "stock_code": "452300", "strategy": "PANIC_BUY", "profit_rate": 4.0, "profit_amount": 80000, "holding_minutes": 9, "sell_time": "2026-04-08 11:34:10", "sell_reason": "+3.5% 달성 (4.00%)", "result": "W", "date": "2026-04-08"}, {"stock_name": "에이스테크", "stock_code": "088800", "strategy": "VWAP_BOUNCE", "profit_rate": -0.92, "profit_amount": -18440, "holding_minutes": 25, "sell_time": "2026-04-08 11:08:27", "sell_reason": "25분 경과 (수익률 -0.92%)", "result": "L", "date": "2026-04-08"}, {"stock_name": "앤로보틱스", "stock_code": "403120", "strategy": "CLOSING_BET", "profit_rate": 4.1, "profit_amount": 81985, "holding_minutes": 1198, "sell_time": "2026-04-08 11:07:21", "sell_reason": "고점(2440)대비 1.0% 반납", "result": "W", "date": "2026-04-08"}, {"stock_name": "아이즈비전", "stock_code": "031300", "strategy": "VWAP_BOUNCE", "profit_rate": 0.26, "profit_amount": 5270, "holding_minutes": 25, "sell_time": "2026-04-08 11:07:19", "sell_reason": "25분 경과 (수익률 0.26%)", "result": "W", "date": "2026-04-08"}]};
+
+        // 전략 가이드 데이터
+        const STRATEGY_GUIDES = [
+            {
+                id: 'morning_gap',
+                title: '시초가 갭 매매',
+                time: '09:00 - 09:30',
+                logic: '장 시작 직후 갭 상승 종목 중 거래량이 폭발하는 종목 포착.',
+                detail: '3% 이하의 적정 갭(A형)은 즉시 대응, 5% 이상의 과도한 갭(B형)은 VWAP/EMA3 지지 확인 후 진입합니다.',
+                color: 'blue'
+            },
+            {
+                id: 'vwap_bounce',
+                title: 'VWAP 눌림목',
+                time: '09:30 - 11:00',
+                logic: '거래대금 50억 상위주가 VWAP 근처에서 지지를 받을 때 진입.',
+                detail: '강력한 1파동 후 VWAP(-2% ~ +0.8%) 근처에서 양봉 전환 및 호가 수급(OBI)을 확인하여 안전하게 진입합니다.',
+                color: 'purple'
+            },
+            {
+                id: 'breakout',
+                title: '전고점 돌파',
+                time: '09:10 - 14:30',
+                logic: '당일 고점을 강력한 수급과 함께 재돌파하는 순간 포착.',
+                detail: '당일 10% 이상 상승, 거래대금 100억 이상의 주도주가 전고점을 돌파할 때 매수 강도(120 이상)를 확인합니다.',
+                color: 'red'
+            },
+            {
+                id: 'panic_buy',
+                title: '투매줍기 (데드캣)',
+                time: '09:30 - 14:30',
+                logic: '단기간 폭락 후 기술적 반등을 노리는 역추세 전략.',
+                detail: 'RSI 35 이하, 볼린저 밴드 하단 이탈 후 양봉 전환 시점에 진입하여 3~5% 내외의 빠른 반등을 노립니다.',
+                color: 'orange'
+            },
+            {
+                id: 'active_scalp',
+                title: '실시간 스캘핑',
+                time: '상시',
+                logic: '초단기 과매도 구간에서 발생하는 잔파동 수익 실현.',
+                detail: 'RSI 30 이하, OBI 매수 우위 상태에서 발생하는 짧은 눌림목을 활용하여 1~2% 수익을 반복적으로 챙깁니다.',
+                color: 'emerald'
+            },
+            {
+                id: 'closing_bet',
+                title: '종가 베팅',
+                time: '15:00 - 15:15',
+                logic: '다음 날 시초가 상승이 기대되는 강력한 종목 선취매.',
+                detail: '당일 15% 이상 상승한 주도주가 고가권에서 버티며, 5일선을 지지하고 호가 잔량이 압도적일 때 진입합니다.',
+                color: 'indigo'
+            }
+        ];
+
+        const STRATEGY_MAP = {
+            'MORNING_GAP_A': '시초가 갭 (A)',
+            'MORNING_GAP_B': '시초가 갭 (B)',
+            'VWAP_BOUNCE': 'VWAP 눌림목',
+            'BREAKOUT_SURGE': '전고점 돌파',
+            'ACTIVE_SCALP': '실시간 스캘핑',
+            'PANIC_BUY': '투매줍기',
+            'CLOSING_BET': '종가 베팅',
+            'Unknown': '기타'
+        };
+
+        const translateStrategy = (name) => STRATEGY_MAP[name] || name;
+
+        const Badge = ({ children, color = 'blue' }) => {
+            const colors = {
+                blue: 'bg-blue-50 text-toss-blue border-blue-100',
+                red: 'bg-red-50 text-toss-red border-red-100',
+                gray: 'bg-toss-gray-100 text-toss-gray-600 border-toss-gray-200'
+            };
+            return (
+                <span className={`px-2 py-1 rounded-full text-[11px] font-bold border ${colors[color]}`}>
+                    {children}
+                </span>
+            );
+        };
+
+        const StatCard = ({ label, value, subValue, trend, icon }) => (
+            <motion.div 
+                whileHover={{ y: -4 }}
+                className="bg-white p-6 rounded-[28px] card-shadow border border-white"
+            >
+                <div className="flex justify-between items-start mb-4">
+                    <span className="text-toss-gray-500 font-semibold text-sm">{label}</span>
+                    <span className="text-xl opacity-80">{icon}</span>
+                </div>
+                <div className="text-2xl font-extrabold tracking-tight mb-1">{value}</div>
+                <div className="flex items-center gap-1.5 text-xs font-bold">
+                    <span className={trend > 0 ? "text-toss-red" : "text-toss-blue"}>
+                        {trend > 0 ? '▲' : '▼'} {Math.abs(trend)}%
+                    </span>
+                    <span className="text-toss-gray-400 font-medium">{subValue}</span>
+                </div>
+            </motion.div>
+        );
+
+        const App = () => {
+            const [selectedTab, setSelectedTab] = useState('summary');
+
+            return (
+                <div className="max-w-4xl mx-auto px-4 py-8 md:py-12">
+                    <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                            <div className="flex items-center gap-2 mb-2">
+                                <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="w-2 h-2 rounded-full bg-emerald-500" />
+                                <span className="text-xs font-bold text-toss-gray-500 uppercase tracking-widest">실시간 전략 분석</span>
+                            </div>
+                            <h1 className="text-4xl font-extrabold tracking-tighter text-toss-gray-900 leading-tight">
+                                주리인 매매 <br/>
+                                <span className="text-toss-blue">대시보드</span>
+                            </h1>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-xs font-bold text-toss-gray-400 mb-1">최종 업데이트</div>
+                            <div className="text-sm font-bold text-toss-gray-700">{DashData.summary.updated_at}</div>
+                        </div>
+                    </header>
+
+                    {/* Quick Stats Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+                        <StatCard 
+                            label="누적 수익금" 
+                            value={`₩${DashData.summary.total_profit.toLocaleString()}`}
+                            trend={(DashData.chart_data[DashData.chart_data.length-1].profit / DashData.summary.total_profit * 100).toFixed(1)}
+                            subValue="일일 수익 성장"
+                            icon="💰"
+                        />
+                        <StatCard 
+                            label="평균 승률" 
+                            value={`${(DashData.summary.wins / DashData.summary.total_trades * 100).toFixed(1)}%`}
+                            trend={5.2}
+                            subValue="지난주 대비"
+                            icon="🎯"
+                        />
+                        <StatCard 
+                            label="총 매매 횟수" 
+                            value={`${DashData.summary.total_trades}회`}
+                            trend={12}
+                            subValue="자동 매매 활성"
+                            icon="🤖"
+                        />
+                    </div>
+
+                    {/* Performance Chart Section */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                        className="bg-white p-8 rounded-[32px] card-shadow mb-10 border border-toss-gray-50 overflow-hidden relative"
+                    >
+                        <div className="flex justify-between items-center mb-8">
+                            <h3 className="text-xl font-extrabold tracking-tight">수익 성장 곡선</h3>
+                            <div className="flex gap-2">
+                                <Badge color="blue">전체 통계</Badge>
+                                <Badge color="gray">기록</Badge>
+                            </div>
+                        </div>
+                        
+                        <div className="h-48 w-full mt-4">
+                            <svg viewBox="0 0 400 100" preserveAspectRatio="none" className="w-full h-full">
+                                <defs>
+                                    <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style={{ stopColor: '#3182f6', stopOpacity: 0.2 }} />
+                                        <stop offset="100%" style={{ stopColor: '#3182f6', stopOpacity: 0 }} />
+                                    </linearGradient>
+                                </defs>
+                                <path 
+                                    d={`M 0,100 L 0.0,100.0 200.0,29.05437612290544 400.0,0.0 L 400,100 Z`} 
+                                    fill="url(#grad)" 
+                                />
+                                <motion.path 
+                                    initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                                    transition={{ duration: 2, ease: "easeOut" }}
+                                    d={`M 0.0,100.0 200.0,29.05437612290544 400.0,0.0`}
+                                    fill="none" 
+                                    stroke="#3182f6" 
+                                    strokeWidth="2.5" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                />
+                            </svg>
+                        </div>
+                    </motion.div>
+
+                    {/* Strategy Guide Section */}
+                    <div className="mb-12">
+                        <div className="flex items-center gap-3 mb-8">
+                            <span className="text-2xl font-bold">🧠</span>
+                            <h2 className="text-2xl font-extrabold tracking-tight">주리인 매매 기법 가이드</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {STRATEGY_GUIDES.map((guide) => (
+                                <div key={guide.id} className="bg-white p-6 rounded-[28px] card-shadow border border-toss-gray-50 hover:border-toss-blue/30 transition-colors group">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-toss-gray-100 text-toss-gray-500">
+                                            {guide.time}
+                                        </span>
+                                    </div>
+                                    <h3 className="text-lg font-extrabold text-toss-gray-900 mb-2 group-hover:text-toss-blue transition-colors">{guide.title}</h3>
+                                    <p className="text-sm text-toss-gray-600 font-medium mb-3">{guide.logic}</p>
+                                    <div className="pt-3 border-t border-toss-gray-100">
+                                        <p className="text-xs text-toss-gray-400 italic line-clamp-2">{guide.detail}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Hall of Fame / Shame */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+                        <section className="bg-white p-6 rounded-[28px] card-shadow border border-emerald-50">
+                            <div className="flex items-center gap-3 mb-6">
+                                <span className="text-2xl">🏆</span>
+                                <h3 className="text-lg font-extrabold text-toss-gray-800">최고의 매매</h3>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-xl font-extrabold text-toss-gray-900 mb-1">{DashData.best_trade.stock_name}</div>
+                                    <div className="text-xs font-bold text-toss-gray-400 capitalize">{translateStrategy(DashData.best_trade.strategy)} 전략</div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-lg font-black text-toss-red">+{DashData.best_trade.profit_rate.toFixed(2)}%</div>
+                                    <div className="text-xs font-bold text-toss-gray-500">+₩{DashData.best_trade.profit_amount.toLocaleString()}</div>
+                                </div>
+                            </div>
+                        </section>
+                        <section className="bg-white p-6 rounded-[28px] card-shadow border border-red-50">
+                            <div className="flex items-center gap-3 mb-6">
+                                <span className="text-2xl">💀</span>
+                                <h3 className="text-lg font-extrabold text-toss-gray-800">최악의 매매</h3>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-xl font-extrabold text-toss-gray-900 mb-1">{DashData.worst_trade.stock_name}</div>
+                                    <div className="text-xs font-bold text-toss-gray-400 capitalize">{translateStrategy(DashData.worst_trade.strategy)} 전략</div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-lg font-black text-toss-blue">{DashData.worst_trade.profit_rate.toFixed(2)}%</div>
+                                    <div className="text-xs font-bold text-toss-gray-500">₩{Math.abs(DashData.worst_trade.profit_amount).toLocaleString()}</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    {/* Strategy Scoreboard */}
+                    <h2 className="text-2xl font-extrabold tracking-tight mb-6">전략 성과판</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                        {DashData.strategies.map((s, idx) => (
+                            <motion.div 
+                                key={idx}
+                                whileHover={{ scale: 1.02 }}
+                                className="bg-white p-5 rounded-[24px] card-shadow border border-toss-gray-50 flex items-center justify-between gap-4"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl ${s.win_rate > 50 ? 'bg-red-50 text-toss-red' : 'bg-blue-50 text-toss-blue'}`}>
+                                        {s.win_rate > 60 ? '🔥' : s.total_profit < 0 ? '⚠️' : '⚡'}
+                                    </div>
+                                    <div>
+                                        <div className="text-[15px] font-black text-toss-gray-800 tracking-tight">{translateStrategy(s.name)}</div>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-[13px] font-black text-toss-gray-800">{s.win_rate.toFixed(1)}% 승률</div>
+                                    <div className={`text-[11px] font-bold ${s.total_profit >= 0 ? 'text-toss-red' : 'text-toss-blue'}`}>
+                                        {s.total_profit >= 0 ? '+' : ''}₩{s.total_profit.toLocaleString()}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Transaction Feed */}
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-extrabold tracking-tight">최근 매매 활동</h2>
+                        <span className="text-toss-gray-400 font-bold text-sm">최근 50건의 매매</span>
+                    </div>
+                    <div className="bg-white rounded-[32px] card-shadow border border-toss-gray-50 overflow-hidden divide-y divide-toss-gray-100">
+                        {DashData.recent_trades.map((t, idx) => (
+                            <div key={idx} className="flex items-center px-6 py-5 hover:bg-toss-gray-50 transition-colors">
+                                <div className="w-10 h-10 rounded-full bg-toss-gray-100 flex items-center justify-center font-bold text-toss-gray-700 mr-4 shrink-0">
+                                    {t.stock_name ? t.stock_name[0] : '?'}
+                                </div>
+                                <div className="flex-1">
+                                    <div className="text-[15px] font-extrabold text-toss-gray-900 leading-tight mb-0.5">{t.stock_name}</div>
+                                    <div className="flex items-center gap-2">
+                                        <Badge color="gray">{translateStrategy(t.strategy)}</Badge>
+                                        <span className="text-xs text-toss-gray-400 font-bold">{t.date}</span>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className={`text-[15px] font-black ${t.profit_amount >= 0 ? 'text-toss-red' : 'text-toss-blue'}`}>
+                                        {t.profit_amount >= 0 ? '+' : ''}{t.profit_rate.toFixed(2)}%
+                                    </div>
+                                    <div className="text-xs font-bold text-toss-gray-400">
+                                        {t.profit_amount >= 0 ? '+' : ''}₩{t.profit_amount.toLocaleString()}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <footer className="mt-20 py-10 border-t border-toss-gray-200 text-center">
+                        <div className="text-toss-gray-400 font-bold text-sm">주리인(JURIN) 퀀트 트레이딩 시스템 | 실험적 대시보드</div>
+                        <div className="text-[10px] text-toss-gray-300 mt-2">© 2026 JST Quantum Research. 투자 권유가 아닙니다.</div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
