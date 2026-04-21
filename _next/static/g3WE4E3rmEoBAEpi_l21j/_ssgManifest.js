@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fc\u002F[slug]","\u002Fc\u002F[slug]\u002Fs\u002F[tablename]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
