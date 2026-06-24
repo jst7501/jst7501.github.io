@@ -678,6 +678,8 @@ function renderPairs() {
 
 // ── 추천 세트(번들) ──
 let bundleSel = 1;
+// 총액 = 화면에 보이는 만원 단위 항목값의 합 (반올림 불일치 방지)
+function bTotalMan(b){ return (b.items||[]).reduce((s,it)=>s+Math.round((it.price||0)/10000),0); }
 function bItem(it){
   const img = it.img ? `<img loading="lazy" src="${it.img}">` : `<span class="ph">${esc(it.cat)}</span>`;
   const specs = (it.specs||[]).map(s=>`<span class="bd-spec">${esc(s)}</span>`).join('');
@@ -705,7 +707,7 @@ function renderBundles(){
   const view = document.getElementById('bundle-view');
   if(!DB.bundles || !DB.bundles.length){ if(tabs)tabs.innerHTML=''; return; }
   tabs.innerHTML = DB.bundles.map((b,i) =>
-    `<div class="btab ${i===bundleSel?'on':''}" data-bt="${i}"><div class="btab-name">${esc(b.name.replace(' 세트',''))}</div><div class="btab-total">${manwon(b.total)}</div></div>`
+    `<div class="btab ${i===bundleSel?'on':''}" data-bt="${i}"><div class="btab-name">${esc(b.name.replace(' 세트',''))}</div><div class="btab-total">${bTotalMan(b)}만</div></div>`
   ).join('');
   tabs.querySelectorAll('[data-bt]').forEach(t => t.onclick = () => { bundleSel = +t.dataset.bt; renderBundles(); });
   const b = DB.bundles[bundleSel];
@@ -717,7 +719,7 @@ function renderBundles(){
           <div class="bundle-name">${esc(b.name)}</div>
           <div class="bundle-tagline">${esc(b.tagline)}</div>
         </div>
-        <div><div class="bundle-total-l">총 순부담</div><div class="bundle-total num">${manwon(b.total)}<small>원</small></div></div>
+        <div><div class="bundle-total-l">총 순부담</div><div class="bundle-total num">${bTotalMan(b)}만<small>원</small></div></div>
       </div>
       ${b.items.map(bItem).join('')}
     </div>`;
